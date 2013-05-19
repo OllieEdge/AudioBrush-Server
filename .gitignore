@@ -1,3 +1,4 @@
 .idea
 public/stylesheets
 node_modules
+.sass-cache
