@@ -8,6 +8,7 @@
   "dependencies": {
     "express": "3.2.4",
     "swig": "~0.13.5",
-    "consolidate": "~0.9.1"
+    "consolidate": "~0.9.1",
+    "mongoose": "~3.6.15"
   }
 }
