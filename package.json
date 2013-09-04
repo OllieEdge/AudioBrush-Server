@@ -9,6 +9,7 @@
     "express": "3.2.4",
     "swig": "~0.13.5",
     "consolidate": "~0.9.1",
-    "mongoose": "~3.6.15"
+    "mongoose": "~3.6.15",
+    "validator": "~1.5.1"
   }
 }

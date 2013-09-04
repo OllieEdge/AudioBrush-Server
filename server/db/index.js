@@ -1,41 +1,22 @@
 var mongoose = require('mongoose')
+var User = require('../resources/User');
+var Track = require('../resources/Track');
+var Score = require('../resources/Score');
 
 mongoose.connection.on('error', function (err) {
-    console.log('--------')
+    console.log('MONGOOSE CONNECTION ERROR <---')
     console.log(err)
 })
 
 mongoose.connection.on('connecting', function (data) {
-    console.log('-------- connecting')
+    console.log('MONGOOSE CONNECTING <---')
     console.log(data)
 })
 
 mongoose.connection.on('connected', function (data) {
-    console.log('-------- connected')
+    console.log('MONGOOSE CONNECTED <---')
     console.log(data)
 })
 
 
 mongoose.connect('localhost', 'audiobrush')
-
-
-
-/*
- *
- * mongoose = require 'mongoose'
-
- mongoose.connection.on 'error' , (err) ->
- console.log arguments , 'error'
-
- mongoose.connection.on 'connecting' , (err) ->
- console.log arguments , 'connecting'
-
- mongoose.connection.on 'connected' , (err) ->
- console.log arguments , 'connected'
-
- mongoose.model 'User' , require './models/User'
-
- mongoose.connect 'localhost' , 'ibjjrs-api'
- *
- *
- * */

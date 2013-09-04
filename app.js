@@ -36,19 +36,14 @@ if ('development' == app.get('env')) {
     app.use(express.errorHandler());
 }
 
-app.get('/', function (req, res) {
-    res.render('index.twig.html')
-});
+//  --- DB ---
+var db = require('./server/db');
 
+// ---- ROUTER ---
+var router = require('./server/router/AppRouter')(app)
+app.set('Router', router);
 
-app.get('/user', function (data) {
-//    var User = require('./server/user')
-//    var u = new User(data)
-//    u.save()
-});
-
-var db = require('./server/db')
-
+//  --- SERVER ---
 http.createServer(app).listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));
 });
