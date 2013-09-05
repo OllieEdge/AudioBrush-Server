@@ -1,4 +1,8 @@
 .idea
 public/stylesheets
 node_modules
-.sass-cache
+.sass-cache/cookbooks
+/tmp
+.vagrant/
+cookbooks/
+.sass-cache/
