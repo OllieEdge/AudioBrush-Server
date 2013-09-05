@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+#^syntax detection
+
+site 'http://community.opscode.com/api/v1'
+
+# cookbook 'chef-client'
+
+cookbook 'build-essential', '>= 1.4.2'
+cookbook 'apt', '>= 2.1.1'
+cookbook 'git', '>= 2.6.0'
+cookbook 'mongodb', '>= 0.11.0'
+cookbook 'node', '>= 1.0.1'
+cookbook 'redis-package', '>= 1.0.0'
+
+
+cookbook 'grunt_cookbook',
+	:git => 'https://github.com/MattSurabian/grunt_cookbook.git'
+
+cookbook 'rvm',
+	:git => 'https://github.com/fnichol/chef-rvm'
+
+# cookbook 'postgresql',
+#   :git => 'https://github.com/findsyou/cookbooks',
+#   :ref => 'postgresql-improvements'
