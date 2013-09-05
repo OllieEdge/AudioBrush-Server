@@ -6,3 +6,5 @@ node_modules
 .vagrant/
 cookbooks/
 .sass-cache/
+pid/
+log/
