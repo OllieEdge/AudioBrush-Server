@@ -1,33 +1,38 @@
 var UserController = require('../controllers/UserController');
 var TrackController = require('../controllers/TrackController');
 var ScoreController = require('../controllers/ScoreController');
+var TournamentController = require('../controllers/TournamentController');
 
 var routes = {
-    // --- USERS ---
-    '/user/create/:username': UserController.createUser,
+	// --- USERS ---
+	'/user/create/:username': UserController.createUser,
 
-    '/user/read/:username'  : UserController.readUser,
-    '/user/update/:username': UserController.updateUser,
-    '/user/delete/:username': UserController.deleteUser,
+	'/user/read/:username'  : UserController.readUser,
+	'/user/update/:username': UserController.updateUser,
+	'/user/delete/:username': UserController.deleteUser,
 
-    '/users/read/'            : UserController.readUsers,
+	'/users/read/'            : UserController.readUsers,
 
+	// --- TRACKS ---
+	'/track/create/:trackName': TrackController.createTrack,
 
-    // --- TRACKS ---
-    '/track/create/:trackName': TrackController.createTrack,
+	'/track/read/:trackName'  : TrackController.getTrack,
+	'/track/update/:trackName': TrackController.updateTrack,
 
-    '/track/read/:trackName'  : TrackController.getTrack,
-    '/track/update/:trackName': TrackController.updateTrack,
+	'/tracks/get/'            : TrackController.getTrackList,
 
-    '/tracks/get/'            : TrackController.getTrackList,
+	// --- SCORES ---
+	'/score/create/:trackName': ScoreController.createScore,
 
+	'/scores/read/'                     : ScoreController.getScores,
 
-    // --- SCORES ---
-    '/score/create/:trackName': ScoreController.createScore
+	// --- Tournaments ---
+	'/tournament/create/:tournamentName': TournamentController.createTournament,
 }
 
 module.exports = function (app) {
-    for (var route in routes) {
-        app.post(route, routes[route])
-    }
+	for (var route in routes) {
+		app.post(route, routes[route])
+	}
 };
+

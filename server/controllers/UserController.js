@@ -26,9 +26,11 @@ module.exports = {
                   }
 
                   else {
+                      console.log(user)
                       if (user.length <= 0) { //check if existing user exists
                           var user = new User(req.params);//make new user
                           user.save(function (err, user) {//save said user
+                              console.log('sending', user)
                               res.send(200, user)//on success send user
                           });
                       }
@@ -108,6 +110,7 @@ module.exports = {
             User
               .findOne({username: username})
               .select('username created updated credits')
+              .lean()
               .exec(function (err, user) {
                   if (err) {
                       error(err, res)

@@ -102,6 +102,7 @@ function getTrackList(trackname, filters, callback) {
         que.limit(filters.limit)
     }
 
+    que.lean();
     que.exec(function (err, tracks) {
 
         if (err) {

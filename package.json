@@ -10,6 +10,7 @@
     "swig": "~0.13.5",
     "consolidate": "~0.9.1",
     "mongoose": "~3.6.15",
-    "validator": "~1.5.1"
+    "validator": "~1.5.1",
+    "async": "~0.2.9"
   }
 }
