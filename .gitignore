@@ -1,10 +1,2 @@
-.idea
-public/stylesheets
-node_modules
-.sass-cache/cookbooks
-/tmp
-.vagrant/
-cookbooks/
-.sass-cache/
-pid/
-log/
+/cookbooks/
+/tmp/librarian/
