@@ -20,6 +20,7 @@ TODOS: ->
 -------------------------------------
 */
 
+require("node-codein")
 
 var express = require('express'),
   http = require('http'),

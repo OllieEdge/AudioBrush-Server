@@ -19,11 +19,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
-  # config.vm.network :forwarded_port, guest: 80, host: 8080
+  config.vm.network :forwarded_port, guest: 8080, host: 8080
+  config.vm.network :forwarded_port, guest: 3000, host: 3000
+  config.vm.network :forwarded_port, guest: 55281, host: 55281
+
+  
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
-  # config.vm.network :private_network, ip: "192.168.33.10"
+  #config.vm.network :private_network, ip: "192.168.33.10"
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
@@ -85,17 +89,22 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision :chef_solo do |chef|
     
     chef.data_bags_path = "data_bags"
+    chef.cookbooks_path = ["cookbooks", "site-cookbooks"]
 
     chef.add_recipe "build-essential"
     chef.add_recipe "apt"
     chef.add_recipe "git"
-    chef.add_recipe 'rvm::user_install'
+
+    chef.add_recipe 'rvm::user'
         
-    chef.add_recipe "nodejs"
-    chef.add_recipe "grunt_cookbook::install_grunt_cli"    
-    
     chef.add_recipe "mongodb::10gen_repo"
     chef.add_recipe "redis-package::server"
+
+    chef.add_recipe "nodejs"
+    chef.add_recipe "grunt_cookbook::install_grunt_cli"    
+    chef.add_recipe "npm-install"    
+    chef.add_recipe "node-inspector"
+    chef.add_recipe "jump_js"    
     
     
     chef.json = {
