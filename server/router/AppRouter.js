@@ -1,3 +1,6 @@
+/*
+ *   THIS NO LONGER WORKS, FIX IT
+ * */
 var UserController = require('../controllers/UserController');
 var TrackController = require('../controllers/TrackController');
 var ScoreController = require('../controllers/ScoreController');
@@ -5,34 +8,92 @@ var TournamentController = require('../controllers/TournamentController');
 
 var routes = {
 	// --- USERS ---
-	'/user/create/:username': UserController.createUser,
+	'/api/v1/user/:username': {
+		method    : 'post',
+		controller: UserController,
+		action    : 'createUser'
+	},
 
-	'/user/read/:username'  : UserController.readUser,
-	'/user/update/:username': UserController.updateUser,
-	'/user/delete/:username': UserController.deleteUser,
+	'/api/v1/user/:username': {
+		method    : 'get',
+		controller: UserController,
+		action    : 'readUser'
+	},
 
-	'/users/read/'            : UserController.readUsers,
+	'/api/v1/user/:username': {
+		method    : 'put',
+		controller: UserController,
+		action    : 'updateUser'
+	},
+
+	'/api/v1/user/:username': {
+		method    : 'delete',
+		controller: UserController,
+		action    : 'deleteUser'
+	},
+
+	'/api/v1/users/'            : {
+		method    : 'get',
+		controller: UserController,
+		action    : 'readUsers'
+	},
 
 	// --- TRACKS ---
-	'/track/create/:trackName': TrackController.createTrack,
+	'/api/v1/track/:trackName': {
+		method    : 'put',
+		controller: TrackController,
+		action    : 'createTrack'
+	},
 
-	'/track/read/:trackName'  : TrackController.getTrack,
-	'/track/update/:trackName': TrackController.updateTrack,
+	'/api/v1/track/:trackName': {
+		method    : 'get',
+		controller: TrackController,
+		action    : 'getTrack'
+	},
 
-	'/tracks/get/'            : TrackController.getTrackList,
+	'/api/v1/track/:trackName': {
+		method    : 'post',
+		controller: TrackController,
+		action    : 'updateTrack'
+	},
+
+	'/api/v1/tracks/'  : {
+		method    : 'get',
+		controller: TrackController,
+		action    : 'getTrackList'
+	},
 
 	// --- SCORES ---
-	'/score/create/:trackName': ScoreController.createScore,
+	'/api/v1/score/': {
+		method    : 'put',
+		controller: ScoreController,
+		action    : 'createScore'
+	},
 
-	'/scores/read/'                     : ScoreController.getScores,
+	'/api/v1/scores/'                     : {
+		method    : 'get',
+		controller: ScoreController,
+		action    : 'getScores'
+	},
 
 	// --- Tournaments ---
-	'/tournament/create/:tournamentName': TournamentController.createTournament,
+	'/api/v1/tournament/:tournamentName': {
+		method    : 'put',
+		controller: TournamentController,
+		action    : 'createTournament'
+	}
 }
 
 module.exports = function (app) {
 	for (var route in routes) {
-		app.post(route, routes[route])
+
+		var attrs = routes[route];
+		var method = attrs.method;
+		var controller = attrs.controller;
+		var action = controller[attrs.action];
+
+		if (!method || !controller || !action) return;
+		app[method](route, action);
 	}
 };
 
