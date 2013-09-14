@@ -13,6 +13,9 @@ var sanitise = require('../utils/Sanitise');
 //api
 module.exports = {
 	createScore: function (req, res) {
+
+		console.log('CREATING SCORES')
+
 		//this needs to be more dry
 		_getNewScore.call(this, req, function (err, score) {
 			if (err) {
@@ -58,14 +61,17 @@ module.exports = {
 // private
 function _getNewScore(req, next) {
 
-	var trackname = req.body.trackName;
-	var username = req.body.username;
-	var score = req.body.score;
+	var trackname = req.body.trackname;
+	var username  = req.body.username;
+	var score     = req.body.score;
 
 	console.log('SCORE -->', score)
 
+	console.log('-----------------');
+	console.log(!score, !trackname, !username);
+	console.log('-----------------');
+
 	if (!score || !trackname || !username) {
-		console.log(!score || !trackname || !username)
 		next('error')
 		return;
 	}
