@@ -13,8 +13,8 @@ cookbook 'node', '>= 1.0.1'
 cookbook 'redis-package', '>= 1.0.0'
 
 
-#cookbook 'grunt_cookbook',
-#	:git => 'https://github.com/MattSurabian/grunt_cookbook.git'
+cookbook 'grunt_cookbook',
+	:git => 'https://github.com/MattSurabian/grunt_cookbook.git'
 
 cookbook 'rvm',
 	:git => 'https://github.com/fnichol/chef-rvm'
