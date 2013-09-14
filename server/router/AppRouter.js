@@ -8,77 +8,77 @@ var TournamentController = require('../controllers/TournamentController');
 
 var routes = {
 	// --- USERS ---
-	'/user/create/:username': {
+	'/api/v1/user/:username': {
 		method    : 'post',
 		controller: UserController,
 		action    : 'createUser'
 	},
 
-	'/user/read/:username': {
+	'/api/v1/user/:username': {
 		method    : 'get',
 		controller: UserController,
 		action    : 'readUser'
 	},
 
-	'/user/update/:username': {
-		method    : 'post',
+	'/api/v1/user/:username': {
+		method    : 'put',
 		controller: UserController,
 		action    : 'updateUser'
 	},
 
-	'/user/delete/:username': {
-		method    : 'post',
+	'/api/v1/user/:username': {
+		method    : 'delete',
 		controller: UserController,
 		action    : 'deleteUser'
 	},
 
-	'/users/read/'            : {
+	'/api/v1/users/'            : {
 		method    : 'get',
 		controller: UserController,
 		action    : 'readUsers'
 	},
 
 	// --- TRACKS ---
-	'/track/create/:trackName': {
-		method    : 'post',
+	'/api/v1/track/:trackName': {
+		method    : 'put',
 		controller: TrackController,
 		action    : 'createTrack'
 	},
 
-	'/track/read/:trackName': {
+	'/api/v1/track/:trackName': {
 		method    : 'get',
 		controller: TrackController,
 		action    : 'getTrack'
 	},
 
-	'/track/update/:trackName': {
+	'/api/v1/track/:trackName': {
 		method    : 'post',
 		controller: TrackController,
 		action    : 'updateTrack'
 	},
 
-	'/tracks/get/'  : {
+	'/api/v1/tracks/'  : {
 		method    : 'get',
 		controller: TrackController,
 		action    : 'getTrackList'
 	},
 
 	// --- SCORES ---
-	'/score/create/': {
-		method    : 'post',
+	'/api/v1/score/': {
+		method    : 'put',
 		controller: ScoreController,
 		action    : 'createScore'
 	},
 
-	'/scores/read/'                     : {
+	'/api/v1/scores/'                     : {
 		method    : 'get',
 		controller: ScoreController,
 		action    : 'getScores'
 	},
 
 	// --- Tournaments ---
-	'/tournament/create/:tournamentName': {
-		method    : 'post',
+	'/api/v1/tournament/:tournamentName': {
+		method    : 'put',
 		controller: TournamentController,
 		action    : 'createTournament'
 	}
