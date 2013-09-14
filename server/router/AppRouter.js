@@ -85,7 +85,7 @@ var routes = {
 }
 
 
-var setup = function(){
+module.exports = function(){
     for (var route in routes) {
 
         var attrs = routes[route];
@@ -97,8 +97,3 @@ var setup = function(){
         app[method](route, action);
     }
 }
-
-
-module.exports = function (app) {
-    setup: setup
-};
