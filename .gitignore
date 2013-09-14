@@ -1,4 +1,4 @@
-/cookbooks/
+chef-server/cookbooks/
 /tmp/librarian/
 .vagrant/
 .idea/
