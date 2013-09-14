@@ -8,7 +8,7 @@ stop on shutdown
 script
     export HOME="/root"    
     
-    exec sudo -u vagrant /usr/local/bin/node /vagrant/node_modules/node-inspector/bin/inspector.js 
+    exec sudo -u vagrant /usr/local/bin/node /vagrant/node_modules/node-inspector/bin/inspector.js --web-port 1234
 end script
 
 pre-start script

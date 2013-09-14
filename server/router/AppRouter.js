@@ -9,7 +9,7 @@ var TournamentController = require('../controllers/TournamentController');
 var routes = {
 	// --- USERS ---
 	'/api/v1/user/:username': {
-		method    : 'post',
+		method    : 'put',
 		controller: UserController,
 		action    : 'createUser'
 	},
@@ -21,15 +21,15 @@ var routes = {
 	},
 
 	'/api/v1/user/:username': {
-		method    : 'put',
+		method    : 'post',
 		controller: UserController,
 		action    : 'updateUser'
 	},
 
 	'/api/v1/user/:username': {
-		method    : 'delete',
+		method    : 'del',
 		controller: UserController,
-		action    : 'deleteUser'
+		action    : 'delUser'
 	},
 
 	'/api/v1/users/'            : {
@@ -84,16 +84,21 @@ var routes = {
 	}
 }
 
+
+var setup = function(){
+    for (var route in routes) {
+
+        var attrs = routes[route];
+        var method = attrs.method;
+        var controller = attrs.controller;
+        var action = controller[attrs.action];
+
+        if (!method || !controller || !action) return;
+        app[method](route, action);
+    }
+}
+
+
 module.exports = function (app) {
-	for (var route in routes) {
-
-		var attrs = routes[route];
-		var method = attrs.method;
-		var controller = attrs.controller;
-		var action = controller[attrs.action];
-
-		if (!method || !controller || !action) return;
-		app[method](route, action);
-	}
+    setup: setup
 };
-

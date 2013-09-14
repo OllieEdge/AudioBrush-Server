@@ -1,1 +1,19 @@
-{"run_list":[ "npm-install" ]}
+{"run_list":[
+    "apt::default",
+    "build-essential::default",
+    "rvm::system",
+    "git::default",
+    "main::update",
+    "main::user",
+    "mongodb::10gen_repo",
+    "redis-package::server",
+    "java::openjdk",
+    "nodejs::default",
+    "grunt_cookbook::install_grunt_cli" ,
+    "npm-install::default",
+    "node-inspector::default",
+    "jump_js::default"
+]}
+
+
+

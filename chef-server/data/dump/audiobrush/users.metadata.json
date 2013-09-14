@@ -1,0 +1,1 @@
+{ "indexes" : [ { "v" : 1, "key" : { "_id" : 1 }, "ns" : "audiobrush.users", "name" : "_id_" }, { "v" : 1, "key" : { "fb_id" : 1 }, "ns" : "audiobrush.users", "name" : "fb_id_1", "background" : true, "safe" : null }, { "v" : 1, "key" : { "created" : 1 }, "ns" : "audiobrush.users", "name" : "created_1", "background" : true, "safe" : null } ] }

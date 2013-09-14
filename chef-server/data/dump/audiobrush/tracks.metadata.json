@@ -1,0 +1,1 @@
+{ "indexes" : [ { "v" : 1, "key" : { "_id" : 1 }, "ns" : "audiobrush.tracks", "name" : "_id_" }, { "v" : 1, "key" : { "trackname" : 1 }, "ns" : "audiobrush.tracks", "name" : "trackname_1", "background" : true, "safe" : null }, { "v" : 1, "key" : { "artist" : 1 }, "ns" : "audiobrush.tracks", "name" : "artist_1", "background" : true, "safe" : null } ] }

@@ -1,6 +1,7 @@
 SITE
   remote: http://community.opscode.com/api/v1
   specs:
+    apache2 (1.7.0)
     apt (2.1.1)
     build-essential (1.4.2)
     chef_gem (0.1.0)
@@ -12,11 +13,25 @@ SITE
       runit (>= 1.0.0)
       windows (>= 0.0.0)
       yum (>= 0.0.0)
+    iptables (0.12.0)
+    java (1.13.0)
+      windows (>= 0.0.0)
     mongodb (0.11.0)
       apt (>= 0.0.0)
+    nginx (1.8.0)
+      apt (>= 0.0.0)
+      build-essential (>= 0.0.0)
+      ohai (>= 1.1.4)
+      runit (>= 0.0.0)
+      yum (>= 0.0.0)
     node (1.0.1)
       git (>= 0.0.0)
       runit (>= 0.0.0)
+    nodejs (1.3.0)
+      apt (>= 0.0.0)
+      build-essential (>= 0.0.0)
+      yum (>= 0.0.0)
+    ohai (1.1.12)
     redis-package (1.0.0)
     runit (1.2.0)
       build-essential (>= 0.0.0)
@@ -26,6 +41,14 @@ SITE
     yum (2.3.2)
 
 GIT
+  remote: https://github.com/MattSurabian/grunt_cookbook.git
+  ref: master
+  sha: a48428617244b8e6e5f3f032a1b0b26ec7150ea5
+  specs:
+    grunt_cookbook (1.0.0)
+      nodejs (>= 0.0.0)
+
+GIT
   remote: https://github.com/fnichol/chef-rvm
   ref: master
   sha: 7038fb8c518d0d7785767de215b1ae463f237973
@@ -33,10 +56,35 @@ GIT
     rvm (0.9.1)
       chef_gem (>= 0.0.0)
 
+GIT
+  remote: https://github.com/lebedevdsl/chef-dotfiles.git
+  ref: master
+  sha: 312226495d6a282892fe9307ed1a5eb028cd6dd9
+  specs:
+    dotfiles (0.1.0)
+
+GIT
+  remote: https://github.com/opscode-cookbooks/jenkins.git
+  ref: master
+  sha: 69b8a7130ebc94209cc87a70773b7260dd3c24d1
+  specs:
+    jenkins (1.0.0)
+      apache2 (>= 0.0.0)
+      apt (>= 0.0.0)
+      iptables (>= 0.0.0)
+      java (>= 0.0.0)
+      nginx (>= 0.0.0)
+      runit (>= 1.0.0)
+      yum (>= 0.0.0)
+
 DEPENDENCIES
   apt (>= 2.1.1)
   build-essential (>= 1.4.2)
+  dotfiles (>= 0)
   git (>= 2.6.0)
+  grunt_cookbook (>= 0)
+  java (>= 0)
+  jenkins (>= 0)
   mongodb (>= 0.11.0)
   node (>= 1.0.1)
   redis-package (>= 1.0.0)
