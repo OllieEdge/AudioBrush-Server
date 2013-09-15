@@ -1,5 +1,7 @@
 chef-server/cookbooks/
 chef-server/tmp/
 /tmp/librarian/
-.vagrant/
+.vagrant
 .idea/
+
+node_modules
