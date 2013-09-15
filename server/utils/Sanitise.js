@@ -22,7 +22,7 @@ module.exports = { //general input validation
         return credits;
     },
     getTrackName : function (req) {
-        return req.params['trackName'] ? req.params['trackName'] : null;
+        return req.params.trackname ? req.params.trackname : null;
     },
     getArtistName: function (req) {
         return req.body.artist ? req.body.artist : null;

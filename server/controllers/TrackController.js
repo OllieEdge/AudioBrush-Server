@@ -7,8 +7,15 @@ var sanitise = require('../utils/Sanitise');
 module.exports = {
 
     createTrack: function (req, res) {
+
+        console.log('CREATE TRACK')
+
         var trackname = sanitise.getTrackName(req)
         var artist = sanitise.getArtistName(req)
+
+        console.log('---------------------')
+        console.log(artist, trackname)
+        console.log('---------------------')
 
         if (artist && trackname) {//if both artist and track exist from the request
 
@@ -36,7 +43,7 @@ module.exports = {
              })*/
         }
         else {
-            error(err, res);
+            error('NO TRACKNAME OR ARTIST', res);
         }
     },
 
@@ -125,6 +132,9 @@ function getTrackList(trackname, filters, callback) {
 // QUERIES FOR EXISTING TRACKS BASED ON USERNAME
 // --------------------------------------------
 function getExistingTrack(trackname, callback) {
+
+    console.log('GET EXISTING TRACK')
+
     var promise = new mongoose.Promise;
     if (callback) promise.addBack(callback);
 

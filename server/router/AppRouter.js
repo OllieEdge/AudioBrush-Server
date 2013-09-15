@@ -7,92 +7,146 @@ var ScoreController = require('../controllers/ScoreController');
 var TournamentController = require('../controllers/TournamentController');
 
 var routes = {
-	// --- USERS ---
-	'/api/v1/user/:username': {
-		method    : 'put',
-		controller: UserController,
-		action    : 'createUser'
-	},
+    // --- USERS ---
+    // --- TRACKS ---
+    // --- SCORES ---
 
-	'/api/v1/user/:username': {
-		method    : 'get',
-		controller: UserController,
-		action    : 'readUser'
-	},
+    '/api/v1/score/': {
+        method: 'put',
+        controller: ScoreController,
+        action: 'createScore'
+    },
 
-	'/api/v1/user/:username': {
-		method    : 'post',
-		controller: UserController,
-		action    : 'updateUser'
-	},
+    '/api/v1/scores/': {
+        method: 'get',
+        controller: ScoreController,
+        action: 'getScores'
+    },
 
-	'/api/v1/user/:username': {
-		method    : 'del',
-		controller: UserController,
-		action    : 'deleteUser'
-	},
-
-	'/api/v1/users/'            : {
-		method    : 'get',
-		controller: UserController,
-		action    : 'readUsers'
-	},
-
-	// --- TRACKS ---
-	'/api/v1/track/:trackName': {
-		method    : 'put',
-		controller: TrackController,
-		action    : 'createTrack'
-	},
-
-	'/api/v1/track/:trackName': {
-		method    : 'get',
-		controller: TrackController,
-		action    : 'getTrack'
-	},
-
-	'/api/v1/track/:trackName': {
-		method    : 'post',
-		controller: TrackController,
-		action    : 'updateTrack'
-	},
-
-	'/api/v1/tracks/'  : {
-		method    : 'get',
-		controller: TrackController,
-		action    : 'getTrackList'
-	},
-
-	// --- SCORES ---
-	'/api/v1/score/': {
-		method    : 'put',
-		controller: ScoreController,
-		action    : 'createScore'
-	},
-
-	'/api/v1/scores/'                     : {
-		method    : 'get',
-		controller: ScoreController,
-		action    : 'getScores'
-	},
-
-	// --- Tournaments ---
-	'/api/v1/tournament/:tournamentName': {
-		method    : 'put',
-		controller: TournamentController,
-		action    : 'createTournament'
-	}
+    // --- Tournaments ---
+    '/api/v1/tournament/:tournamentName': {
+        method: 'put',
+        controller: TournamentController,
+        action: 'createTournament'
+    }
 }
 
+var applicationRoutes = [
 
-module.exports = function(app){
+    // ------------------------------------
+    // ------------- USERS ----------------
+    // ------------------------------------
 
-    for (var route in routes) {
+    //CREATE USER
+    {
+        route: '/api/v1/user/:username',
+        method: 'put',
+        controller: UserController,
+        action: 'createUser'
+    },
 
-        var attrs = routes[route];
+    //UPDATE USER
+    {
+        route: '/api/v1/user/:username',
+        method: 'post',
+        controller: UserController,
+        action: 'updateUser'
+    },
+
+    //GET USER
+    {
+        route: '/api/v1/user/:username',
+        method: 'get',
+        controller: UserController,
+        action: 'readUser'
+    },
+
+    //GET USERS
+    {
+        route: '/api/v1/users',
+        method: 'get',
+        controller: UserController,
+        action: 'readUsers'
+    },
+
+
+    //DELETE USER
+    {
+        route: '/api/v1/user/:username',
+        method: 'del',
+        controller: UserController,
+        action: 'deleteUser'
+    },
+
+
+    // ------------------------------------
+    // ------------- TRACKS ---------------
+    // ------------------------------------
+
+    //CREATE TRACK
+    {
+        route: '/api/v1/track/:trackname',
+        method: 'put',
+        controller: TrackController,
+        action: 'createTrack'
+    },
+
+    //CREATE TRACK
+    {
+        route: '/api/v1/track/:trackname',
+        method: 'get',
+        controller: TrackController,
+        action: 'getTrack'
+    },
+
+    //CREATE TRACKS
+    {
+        route: '/api/v1/tracks',
+        method: 'get',
+        controller: TrackController,
+        action: 'getTrackList'
+    },
+
+
+    // ------------------------------------
+    // ------------- SCORES ---------------
+    // ------------------------------------
+
+    //CREATE SCORE
+    {
+        route: '/api/v1/score/:trackname',
+        method: 'put',
+        controller: ScoreController,
+        action: 'createScore'
+    },
+
+    //GET SCORE
+    {
+        route: '/api/v1/scores',
+        method: 'get',
+        controller: ScoreController,
+        action: 'getScores'
+    }
+]
+
+
+
+
+
+module.exports = function (app) {
+
+    for (var i in applicationRoutes) {
+
+        var attrs = applicationRoutes[i];
+
+        var route = attrs.route;
         var method = attrs.method;
         var controller = attrs.controller;
         var action = controller[attrs.action];
+
+
+        console.log(route, method)
+
 
         if (!method || !controller || !action) {
             return;

@@ -15,8 +15,9 @@ execute "install jenkins command line tools" do
   action :run
 end
 
-directory "/home/vagrant/" do
-  action :create
+#start jenkins
+service "jenkins" do
+  action :stop
 end
 
 #remove jenkins default home folder
@@ -26,10 +27,13 @@ execute "-- remove Jenkins settings" do
   command "rm -rf jenkins"
 end
 
-#re-create jenkins home dir
-directory "/home/jenkins" do
-  owner "jenkins"
-  action :create
+
+#un-tar jenkins config
+execute "restore jenkins backup" do
+  user "root"
+
+  cwd "/vagrant/chef-server/data/jenkins-backup"
+  command  "tar -zxvf backup3.tar.gz -C /tmp"
 end
 
 
@@ -38,7 +42,21 @@ execute "restore jenkins backup" do
   user "root"
 
   cwd "/vagrant/chef-server/data/jenkins-backup"
-  command  "tar -zxvf back-up-latest.tar.gz -C /home"
+  command  "sudo cp -R  /tmp/home/jenkins/ /home/jenkins/"
+end
+
+grunt_cookbook_npm "/" do
+  action :install
+  package "mocha"
+  flags "--global"
+end
+
+
+#un-tar jenkins config
+execute "restore jenkins backup" do
+  user "root"
+
+  command  "sudo chmod -R 755 /home/jenkins"
 end
 
 #install jenkins plugins - git
@@ -67,5 +85,8 @@ end
 
 #start jenkins
 service "jenkins" do
-  action :restart
+  action :start
 end
+
+
+

@@ -61,23 +61,19 @@ module.exports = {
 // private
 function _getNewScore(req, next) {
 
-	var trackname = req.body.trackname;
+	var trackname = req.params.trackname;
 	var username  = req.body.username;
 	var score     = req.body.score;
+    var track
+    var user;
 
-	console.log('SCORE -->', score)
-
-	console.log('-----------------');
-	console.log(!score, !trackname, !username);
-	console.log('-----------------');
-
-	if (!score || !trackname || !username) {
+    if (!score || !trackname || !username) {
 		next('error')
 		return;
 	}
 
-	var track;
-	var user;
+
+    console.log(score, trackname, username)
 
 	async.parallel([
 		function (callback) {
@@ -88,10 +84,10 @@ function _getNewScore(req, next) {
 		}
 	], function (err, results) {
 
-		console.log('result', results)
-
 		var track = results[0];
 		var user = results[1];
+
+        console.log(track, user)
 
 		if (track && user) {
 			console.log('writing', score)
