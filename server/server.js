@@ -7,7 +7,7 @@ var express = require('express'),
 
 var app = express();
 
-var expressLogFile = fs.createWriteStream('./logs/express.log', {flags: 'a'});
+//var expressLogFile = fs.createWriteStream('./logs/express.log', {flags: 'a'});
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -26,7 +26,7 @@ app.set('view engine', 'html');
 app.set('view options', {layout: false});
 app.set('view cache', false);
 
-app.use(express.logger({stream: expressLogFile}));
+//app.use(express.logger({stream: expressLogFile}));
 app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.bodyParser());

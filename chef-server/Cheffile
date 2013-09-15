@@ -13,6 +13,7 @@ cookbook 'node', '>= 1.0.1'
 cookbook 'redis-package', '>= 1.0.0'
 
 cookbook 'java'
+cookbook 'nginx'
 
 
 cookbook 'dotfiles',

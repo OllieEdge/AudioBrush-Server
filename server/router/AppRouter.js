@@ -29,7 +29,7 @@ var routes = {
 	'/api/v1/user/:username': {
 		method    : 'del',
 		controller: UserController,
-		action    : 'delUser'
+		action    : 'deleteUser'
 	},
 
 	'/api/v1/users/'            : {
@@ -85,7 +85,8 @@ var routes = {
 }
 
 
-module.exports = function(){
+module.exports = function(app){
+
     for (var route in routes) {
 
         var attrs = routes[route];
@@ -93,7 +94,11 @@ module.exports = function(){
         var controller = attrs.controller;
         var action = controller[attrs.action];
 
-        if (!method || !controller || !action) return;
+        if (!method || !controller || !action) {
+            return;
+        }
         app[method](route, action);
+
+
     }
 }
