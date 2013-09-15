@@ -13,12 +13,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #config.vm.network :forwarded_port, guest: 3000,  host: 3000
   #config.vm.network :forwarded_port, guest: 55281, host: 55281
 
-  config.vm.network :private_network, ip: "192.168.33.10"
+  config.vm.network :private_network, ip : "192.168.33.10"
 
   config.vm.provider :virtualbox do |vb|
-    vb.customize ["modifyvm", :id, "--ioapic",  "on"]
-    vb.customize ["modifyvm", :id, "--memory",  "4096"]
-    vb.customize ["modifyvm", :id, "--cpus",    "4"]
+
+    vb.customize ["modifyvm", :id, "--ioapic", "on"]
+    vb.customize ["modifyvm", :id, "--memory", "4096"]
+    vb.customize ["modifyvm", :id, "--cpus", "4"]
+
   end
 
 
@@ -43,7 +45,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     chef.add_recipe "java::openjdk"
     chef.add_recipe "jenkins::server"
-    chef.add_recipe "main::cron"
 
     chef.add_recipe "dotfiles::default"
 
@@ -53,15 +54,21 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.add_recipe "node-inspector::default"
     chef.add_recipe "jump_js::default"
 
+    chef.add_recipe "main::cron"
+
     chef.json = {
+
         :dotfiles => {
             :standard_repository => 'https://github.com/mathiasbynens/dotfiles.git'
         },
+
         :jenkins => {
             :server => {
                 :home => '/home/jenkins'
             }
         }
     }
+
   end
+
 end
