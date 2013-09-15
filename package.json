@@ -17,6 +17,8 @@
     "node-inspector": "~0.4.0",
     "node-codein": "~1.0.4",
     "supertest": "~0.7.1",
-    "assert": "~0.4.9"
+    "assert": "~0.4.9",
+    "underscore": "~1.5.2",
+    "q": "~0.9.7"
   }
 }

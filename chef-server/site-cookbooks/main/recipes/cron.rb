@@ -42,18 +42,18 @@ execute "restore jenkins backup" do
 end
 
 #install jenkins plugins - git
-execute "install Git for Jenkins" do
-  user "vagrant"
-  cwd "/usr/jenkins/plugins"
-  command  "wget http://updates.jenkins-ci.org/download/plugins/git-client/latest/git-client.hpi"
-end
-
+#execute "install Git for Jenkins" do
+#  user "vagrant"
+#  cwd "/usr/jenkins/plugins"
+#  command  "wget http://updates.jenkins-ci.org/download/plugins/git-client/latest/git-client.hpi"
+#end
+#
 #install jenkins plugins - html output
-execute "install html publisher for Jenkins" do
-  user "vagrant"
-  cwd "/usr/local/bin"
-  command  "java -jar jenkins-cli.jar -s http://localhost:8080 install-plugin http://updates.jenkins-ci.org/download/plugins/htmlpublisher/latest/htmlpublisher.hpi"
-end
+#execute "install html publisher for Jenkins" do
+#  user "vagrant"
+#  cwd "/usr/local/bin"
+#  command  "java -jar jenkins-cli.jar -s http://localhost:8080 install-plugin http://updates.jenkins-ci.org/download/plugins/htmlpublisher/latest/htmlpublisher.hpi"
+#end
 
 #template "/home/jenkins/.ssh/id_rsa.pub" do
 #  source "id_rsa.pub.erb"
