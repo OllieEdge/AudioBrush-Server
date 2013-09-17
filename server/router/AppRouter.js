@@ -5,6 +5,7 @@ var UserController = require('../controllers/UserController');
 var TrackController = require('../controllers/TrackController');
 var ScoreController = require('../controllers/ScoreController');
 var TournamentController = require('../controllers/TournamentController');
+var ProductController = require('../controllers/ProductController');
 
 var routes = {
     // --- USERS ---
@@ -75,6 +76,43 @@ var applicationRoutes = [
         method: 'delete',
         controller: UserController,
         action: 'deleteUser'
+    },
+
+    
+    // ------------------------------------
+    // ------------- PRODUCTS -------------
+    // ------------------------------------
+
+    //CREATE PRODUCT
+    {
+        route: '/api/v1/products/:facebookID',
+        method: 'put',
+        controller: ProductController,
+        action: 'createProduct'
+    },
+
+    //UPDATE PRODUCT
+    {
+        route: '/api/v1/products/:facebookID',
+        method: 'post',
+        controller: ProductController,
+        action: 'updateProduct'
+    },
+
+    //GET PRODUCTS
+    {
+        route: '/api/v1/products/:facebookID',
+        method: 'get',
+        controller: ProductController,
+        action: 'readProduct'
+    },
+
+    //DELETE PRODUCT
+    {
+        route: '/api/v1/products/:facebookID',
+        method: 'delete',
+        controller: ProductController,
+        action: 'deleteProduct'
     },
 
 

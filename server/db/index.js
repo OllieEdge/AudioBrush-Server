@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var User = require('../resources/User');
 var Track = require('../resources/Track');
 var Score = require('../resources/Score');
+var Product = require('../resources/Product');
 var Tournament = require('../resources/Tournament');
 
 mongoose.connection.on('error', function (err) {

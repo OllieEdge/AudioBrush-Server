@@ -103,7 +103,7 @@ module.exports = {
         //check for the change of username
         var newUsername = req.body.username ? sanitise.username(req.body.username) : null;
         var newCredits = req.body.credits ? sanitise.credits(req.body.credits) : null;
-        var newUnlimited = req.body.unlimited ? sanitise.credits(req.body.unlimited) : null;
+        var newUnlimited = req.body.unlimited ? sanitise.unlimited(req.body.unlimited) : null;
 
         if (facebookID) {
             User
