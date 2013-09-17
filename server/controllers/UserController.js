@@ -1,3 +1,4 @@
+
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
 
@@ -11,31 +12,31 @@ module.exports = {
     createUser: function (req, res) {
 
         if (req.params.username) {
-            var username = sanitise.username(req.params.username)
+            var facebookID = sanitise.username(req.params.username);
 
             // query db for existing player with username
             User
-                .find({ role: 'player', username: username })
+                .find({ role: 'player', fb_id: facebookID })
                 .limit(1)
                 .exec(function (err, user) {
 
                     /* TODO ADD ROBUST ERROR HANDELING */
                     if (err) {
-                        error(err)
+                        error(err);
                     }
 
                     else {
                         if (user.length <= 0) { //check if existing user exists
-                            var user = new User(req.params);//make new user
+                            var user = new User(req.body);//make new user
                             user.save(function (err, user) {//save said user
-                                res.send(200, user)//on success send user
+                                res.send(200, user);//on success send user
                             });
                         }
                         else {
-                            res.send(401, new Error())//send 401
+                            res.send(401, new Error());//send 401
                         }
                     }
-                })
+                });
         }
         else {
             error();
@@ -47,23 +48,22 @@ module.exports = {
     readUser: function (req, res) {
 
         if (req.params.username) {
-            var username = sanitise.username(req.params.username);//sanitise the input
+            var facebookID = sanitise.username(req.params.username);//sanitise the input
 
             User
-                .find({ role: 'player', username: username })
-                .select('role username created updated')
+                .find({ role: 'player', fb_id: facebookID })
                 .exec(function (err, user) {
                     if (err) {
                         error(err);
                     }
                     else {
-                        res.send(200, user)
+                        res.send(200, user);
                     }
-                })
+                });
         }
 
         else {
-            res.send(400, new Error('Please use a resource identifier'))
+            res.send(400, new Error('Please use a resource identifier'));
         }
 
 
@@ -85,9 +85,9 @@ module.exports = {
                     error(err);
                 }
                 else {
-                    res.send(200, users)
+                    res.send(200, users);
                 }
-            })
+            });
 
 
     },
@@ -98,58 +98,63 @@ module.exports = {
     updateUser: function (req, res) {
 
         //check for the route user name /update/user/:username
-        var username = req.params.username ? sanitise.username(req.params.username) : null;//sanitise the input
+        var facebookID = req.params.username ? sanitise.username(req.params.username) : null;//sanitise the input
 
         //check for the change of username
         var newUsername = req.body.username ? sanitise.username(req.body.username) : null;
-        var credits = req.body.credits ? sanitise.credits(req.body.credits) : null;
+        var newCredits = req.body.credits ? sanitise.credits(req.body.credits) : null;
+        var newUnlimited = req.body.unlimited ? sanitise.credits(req.body.unlimited) : null;
 
-        if (username) {
+        if (facebookID) {
             User
-                .findOne({ username: username })
-                .select('username created updated credits')
+                .findOne({ fb_id: facebookID })
                 .exec(function (err, user) {
 
                     if (err) {
-                        error(err, res)
+                        error(err, res);
                     }
                     else if (user) {
                         user.username = newUsername ? newUsername : user.username;
-                        user.credits = credits ? credits : user.credits;
+                        user.credits = newCredits ? newCredits : user.credits;
+                        user.unlimited = newUnlimited ? newUnlimited : user.credits;
                         user.save(function (err, user) {
                             if (err) {
                                 error(err, res);
                             }
                             else {
-                                res.send(200, user)
+                                res.send(200, user);
                             }
-                        })
+                        });
                     }
-                })
+                });
 
 
         }
         else {
-            error(new Error('no username provided'), res)
+            error(new Error('No FacebookID Provided'), res);
         }
 
     },
 
-
     //  DELETE USER
     //  ------------------------
     deleteUser: function (req, res) {
-        var username = req.params.username ? sanitise.username(req.params.username) : null;//sanitise the input
-        if (username) {
-            User.findOne({username: username}).exec(function (err, user) {
+        var facebookID = req.params.username ? sanitise.username(req.params.username) : null;//sanitise the input
+        
+        if (facebookID) {
+            User
+            	.findOne({ role: 'player', fb_id: facebookID })
+            	.exec(function (err, user) {
+            		
                 if (err) {
                     error(err, res);
                 }
                 else if (user) {
-                    user.remove()
-                    res.send(200, {})
+                    user.remove();
+                    res.send(200, {});
                 }
-            })
+                
+            });
         }
     }
 };

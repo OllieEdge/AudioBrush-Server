@@ -29,7 +29,7 @@ var routes = {
         controller: TournamentController,
         action: 'createTournament'
     }
-}
+};
 
 var applicationRoutes = [
 
@@ -69,11 +69,10 @@ var applicationRoutes = [
         action: 'readUsers'
     },
 
-
     //DELETE USER
     {
         route: '/api/v1/user/:username',
-        method: 'del',
+        method: 'delete',
         controller: UserController,
         action: 'deleteUser'
     },
@@ -127,7 +126,7 @@ var applicationRoutes = [
         controller: ScoreController,
         action: 'getScores'
     }
-]
+];
 
 
 
@@ -145,7 +144,7 @@ module.exports = function (app) {
         var action = controller[attrs.action];
 
 
-        console.log(route, method)
+        console.log(route, method);
 
 
         if (!method || !controller || !action) {
@@ -155,4 +154,4 @@ module.exports = function (app) {
 
 
     }
-}
+};

@@ -27,4 +27,4 @@ module.exports = { //general input validation
     getArtistName: function (req) {
         return req.body.artist ? req.body.artist : null;
     }
-}
+};

@@ -19,9 +19,9 @@ module.exports = {
 		console.log('boo yah');
 
 		ScoreController.getNewScore(req, function(err, score){
-			if(err) error(err, res)
+			if(err) error(err, res);
 			else if(score){
-				console.log(score)
+				console.log(score);
 			}
 		});
 
@@ -37,4 +37,4 @@ module.exports = {
 		 res.send(200, tournament);
 		 })*/
 	}
-}
+};

@@ -12,11 +12,11 @@ var Track = mongoose.Schema({
     },
     plays      : {
         type: Number,
-        default: 1
+        "default": 1
     },
     last_update: {
         type   : Date,
-        default: Date.now
+        "default": Date.now
     }
 });
 

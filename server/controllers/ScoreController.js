@@ -14,20 +14,20 @@ var sanitise = require('../utils/Sanitise');
 module.exports = {
 	createScore: function (req, res) {
 
-		console.log('CREATING SCORES')
+		console.log('CREATING SCORES');
 
 		//this needs to be more dry
 		_getNewScore.call(this, req, function (err, score) {
 			if (err) {
-				error('', res)
+				error('', res);
 			}
 			else if (score) {
 				res.send(200, score);
 			}
 			else {
-				error('', res)
+				error('', res);
 			}
-		})
+		});
 	},
 
 	getScores  : function (req, res) {
@@ -49,14 +49,14 @@ module.exports = {
 				else if (scores) {
 					res.send(200, scores);
 				}
-			})
+			});
 	},
 
 	//kinda private api
 	getNewScore: function () {
-		return _getNewScore.apply(this, arguments)
+		return _getNewScore.apply(this, arguments);
 	}
-}
+};
 
 // private
 function _getNewScore(req, next) {
@@ -64,16 +64,14 @@ function _getNewScore(req, next) {
 	var trackname = req.params.trackname;
 	var username  = req.body.username;
 	var score     = req.body.score;
-    var track
-    var user;
 
     if (!score || !trackname || !username) {
-		next('error')
+		next('error');
 		return;
 	}
 
 
-    console.log(score, trackname, username)
+    console.log(score, trackname, username);
 
 	async.parallel([
 		function (callback) {
@@ -87,25 +85,25 @@ function _getNewScore(req, next) {
 		var track = results[0];
 		var user = results[1];
 
-        console.log(track, user)
+        console.log(track, user);
 
 		if (track && user) {
-			console.log('writing', score)
+			console.log('writing', score);
 			var scoreObj = new Score({//make new score
 				trackId: track._id,
 				userId : user._id,
 				score  : score
 			}).save(function (err, score) {
 					if (err) {
-						next('error')
+						next('error');
 					}
 					else {
-						next(null, score)
+						next(null, score);
 					}
-				})
+				});
 		}
 		else {
-			next('error')
+			next('error');
 		}
 	});
 }
