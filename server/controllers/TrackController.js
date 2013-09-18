@@ -163,7 +163,6 @@ function getExistingTrack(trackkey, callback) {
               promise.error(err);//if error reject promise
           }
           else if (track) {//if track, increment by one
-              incrementTrack(track);
               promise.complete(track);
           }
           else {

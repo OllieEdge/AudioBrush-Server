@@ -24,7 +24,7 @@ module.exports = {
 			}
 			else if (status == null) {
 				//this needs to be more dry
-				_getNewScore.call(this, req, function (err, score) {
+				_setupNewScore.call(this, req, function (err, score) {
 					if (err) {
 						error('', res);
 					}
@@ -67,10 +67,11 @@ module.exports = {
 	
 	//Get the scores for the specified track and sort by score descending
 	getScoresForTrack : function (req, res){
-		var limit = 50;
-
+		
 		var searchTrackkey = sanitise.trackkey(req.params.trackkey);
-
+		var limit = req.body.limit;
+		
+		
 		Score.find({trackkey:searchTrackkey})
 			.lean()
 			.populate({
@@ -118,7 +119,10 @@ module.exports = {
 };
 
 
-//Attempt to update a previous score.
+//--------------------------------------------
+//UPDATES A PREVIOUS SCORE IN THE DATABASE
+//If a previous score doesn't exist it will return null.
+//--------------------------------------------
 function _updatePreviousScore(req, next){
 	
 	var trackkey = req.body.trackkey;
@@ -127,6 +131,7 @@ function _updatePreviousScore(req, next){
 	var userId = "";
 	
 	 if (!score || !trackkey || !facebookID) {
+		 console.log("Missing update score parameters, params required: trackkey, fb_id, score");
 			next('error');
 			return;
 	}
@@ -140,82 +145,244 @@ function _updatePreviousScore(req, next){
          else if (user) {
         	 userId = user._id;
         	 
-        	 Score.findOne({trackkey:trackkey, userId:userId})
-        	 .exec(function (err, scores) {
-        			if (err) {
+        	 console.log("Attempting update of users score: " + facebookID);
+        	 
+        	 async.parallel([
+	         		function (callback) {
+	         			//This finds if the scores record for this track and user already exists.
+	         			return Score.findOne({trackkey:trackkey, userId:userId}).exec(callback);
+	         		},
+	         		function (callback) {
+	         			//This finds all the scores greater or equal to the one that we're posting.
+	         			return Score.find({trackkey:trackkey, score:{$gte:score}}).lean().exec(callback);
+	         		},
+	         		function (callback) {
+	        			return Track.findOne({trackkey: trackkey}).exec(callback);
+	        		}
+	         	], function (err, results) {
+        		 
+        		 	var previousScore = results[0];
+        			var scoresGreaterOrEqualToThisScore = results[1];
+        			var track = results[2];
+        			
+        			if(err){
+        				console.log("There was an error whilst calling the update asyncronous method.");
         				next('error');
         			}
-        			else if (scores) {
-        				if(score > scores.score){
-	        				scores.score = score;
-	        				scores.save();
+        			else if(previousScore && scoresGreaterOrEqualToThisScore){
+        				//Only update the score is the new one is greater than the old one. The client won't send a request unless it knows the score is greater but this is a precaution.
+        				if(score > previousScore.score){
+        					previousScore.score = score;
+        					console.log("Saving new score.");
+        					previousScore.save();
+        					console.log("Saved new score.");
         				}
-        				next(null, scores);
+        				//Have a little problem here, if the score wasn't better, the rank will be incorrect as it's based on the score submitted on this call.
+        				incrementTrack(track);
+        				previousScore.rank = scoresGreaterOrEqualToThisScore.length+1;
+        				next(null, previousScore);
         			}
-        			else if(scores == null){
+        			else if(previousScore == null){
+        				console.log("Specified user has not played this track before, moving on to create a new score document.");
         				next(null, null);
         			}
-        			else {
+        			else if(scoresGreaterOrEqualToThisScore == null){
+        				console.log("There was an error attempting to get the rank of this user for this track.");
+        			}
+        			else{
         				next('error');
         			}
-        		});
-        	 
-        	 
+        		 
+        	 });
          }
          else{
+        	 console.log("Couldn't find the user specified whilst updating the score.");
         	 next('error');
          }
 	 });
 }
 
-// private
-function _getNewScore(req, next) {
+//--------------------------------------------
+//PREPARES EVERYTHING FOR A NEW SCORE
+//When posting a new score document, their needs to be a valid track 
+//document for the score document. This makes sure that the track exists.
+//If it doesn't exist it will create one.
+//--------------------------------------------
+function _setupNewScore(req, next) {
 
 	var trackkey = req.body.trackkey;
 	var facebookID  = req.body.fb_id;
 	var score     = req.body.score;
+	var trackname = req.body.trackname;
+	var artist = req.body.artist;
 
+	//Make sure the compulsory parameters are set
     if (!score || !trackkey || !facebookID) {
+    	console.log("Missing parameters to save new score, params required are: trackkey, fb_id, score");
 		next('error');
 		return;
 	}
+    
+    //	Make sure that the track exists before posting the new score.
+    getExistingTrack(trackkey)
+    .then(function (track) {
+    	if (track) {
+    		
+    		//Save the score and pass on the responsibility
+    		saveNewHighscore(req, next);
+    		
+    	}
+    	else {
+    		//Make sure that the track parameters are set.
+    		if(!trackname || !artist){
+    			console.log("Missing parameters to save a new track. When posting a new score make sure that there are the track parameters too: trackname, artist, trackkey");
+    			next('error');
+    			return;
+    		}
+    		console.log("Track for this score doesn't exist, creating a new track...");
+    		//Create the new track document
+    		return saveNewTrack({ trackname: trackname, artist: artist , trackkey: trackkey});
+    	}
+    })
+    .then(function (track) {//Once a new track is saved then do this...
+    	if (track) {
+    		
+    		//Save the score and pass on the responsibility
+    		saveNewHighscore(req, next);
+    		
+    	}
+    	else {
+    		console.log("There was a problem creating a new track document when posting the new score.");
+    		next('error');
+    	}
+    });
+}
 
-
-    console.log(score, trackkey, facebookID);
-
+//--------------------------------------------
+//SAVE A NEW SCORE
+//This method is only used when there is no current score document for the specified track
+//--------------------------------------------
+function saveNewHighscore(req, next){
+	
+	var trackkey = req.body.trackkey;
+	var facebookID  = req.body.fb_id;
+	var score     = req.body.score;
+	
+	
+	//We don't need to check any of the variables as we already have previously.
 	async.parallel([
 		function (callback) {
-			return Track.findOne({trackkey: trackkey}).lean().exec(callback);
+			//We need this so that we can both and the reference to the score document and increment the track play
+			return Track.findOne({trackkey: trackkey}).exec(callback);
 		},
 		function (callback) {
+			//We need this so that we can add the user reference to the score document.
 			return User.findOne({fb_id: facebookID}).lean().exec(callback);
-		}
+		},
+		function (callback) {
+ 			//This finds all the scores greater or equal to the one that we're posting. used for ranking
+ 			return Score.find({trackkey:trackkey, score:{$gte:score}}).lean().exec(callback);
+ 		}
 	], function (err, results) {
 
 		var track = results[0];
 		var user = results[1];
+		var scoresGreaterOrEqualToThisScore = results[2];
 
-        console.log(track, user);
-
-		if (track && user) {
-			console.log('writing', score);
-			var scoreObj = new Score({//make new score
-				trackId: track._id,
-				userId : user._id,
-				score  : score,
-				trackkey : track.trackkey
-			}).save(function (err, score) {
-					if (err) {
-						next('error');
-					}
-					else {
-						next(null, score);
-					}
-				});
+		if (track && user && scoresGreaterOrEqualToThisScore) {
+			console.log("Saving new score.");
+			var scoreObj = new Score({trackId: track._id, userId : user._id, score  : score, trackkey : track.trackkey})
+			.save(function (err, score) {
+				if (err) {
+					next('error');
+				}
+				else {
+					console.log("Saved new score.");
+					score.rank = scoresGreaterOrEqualToThisScore.length+1;
+					incrementTrack(track);
+					next(null, score);
+				}
+			});
+			scoreObj;//I've put this here because i get the stupid "scoreObj" may not be used warning message - which is FUCKING ANNOYING
 		}
 		else {
+			if(!track){
+				console.log("Something happened getting track data whilst trying to post a new score");	
+			}
+			if(!user){
+				console.log("Something happened getting user data whilst trying to post a new score");	
+			}
+			if(!scoresGreaterOrEqualToThisScore){
+				console.log("Something happened getting ranking data whilst trying to post a new score");	
+			}
 			next('error');
 		}
 	});
 }
 
+//--------------------------------------------
+//GET TRACK
+//QUERIES FOR EXISTING TRACKS BASED ON USERNAME
+//--------------------------------------------
+function getExistingTrack(trackkey, callback) {
+
+ console.log('GET EXISTING TRACK');
+
+ var promise = new mongoose.Promise;
+ if (callback) promise.addBack(callback);
+
+ Track.findOne({trackkey: trackkey})//find a track
+   .exec(function (err, track) {
+       if (err) {
+           promise.error(err);//if error reject promise
+       }
+       else if (track) {//if track, increment by one
+           promise.complete(track);
+       }
+       else {
+           promise.complete(null);//if no track return 0;
+       }
+
+
+   });
+
+ return promise;
+}
+
+//--------------------------------------------
+//SAVE NEW TRACK
+//SAVES A BRAND NEW TRACK OBJECT
+//--------------------------------------------
+function saveNewTrack(attributes, callback) {
+ var promise = new mongoose.Promise;
+ if (callback) promise.addBack(callback);
+
+ var track = new Track({ //else generate a new track object
+     trackname: attributes.trackname,
+     artist   : attributes.artist,
+     trackkey : attributes.trackkey
+ });
+ track.save(function (err, track) {// and save it!
+     if (err) {
+         promise.error(err);
+     }
+     else if (track) {
+         promise.complete(track); //send the resulting track
+     }
+     else {
+         promise.complete(null); //send the resulting track
+     }
+ });
+
+ return promise;
+}
+
+//--------------------------------------------
+//INCREMENT TRACK
+//INCREASES A TRACKS PLAYS VALUE BY ONE
+//--------------------------------------------
+function incrementTrack(track) {
+	console.log("Incrementing track play for: " + track.trackkey);
+	track.plays = track.plays += 1;
+	track.save();
+}

@@ -176,7 +176,7 @@ var applicationRoutes = [
   //GET SCORES FOR TRACK
     {
         route: '/api/v1/scores/:trackkey',
-        method: 'get',
+        method: 'post',
         controller: ScoreController,
         action: 'getScoresForTrack'
     },

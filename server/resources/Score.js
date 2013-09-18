@@ -20,6 +20,9 @@ var Score = Schema({
 	created: {
 		type   : Date,
 		"default": Date.now()
+	},
+	rank: {
+		type   : Number
 	}
 });
 
