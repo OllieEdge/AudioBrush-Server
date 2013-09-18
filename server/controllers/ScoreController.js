@@ -87,7 +87,7 @@ module.exports = {
 					error(err, res);
 				}
 				else if (scores) {
-//					//We dont want the tracks that aren't for this track.
+//					//We don't want the tracks that aren't for this track.
 //					scores = scores.filter(function(scores){
 //					     return scores.trackId.length;
 //					 });
@@ -176,11 +176,17 @@ function _updatePreviousScore(req, next){
         					console.log("Saving new score.");
         					previousScore.save();
         					console.log("Saved new score.");
+        					previousScore.rank = scoresGreaterOrEqualToThisScore.length+1;
+            				next(null, previousScore);
         				}
-        				//Have a little problem here, if the score wasn't better, the rank will be incorrect as it's based on the score submitted on this call.
+        				else{
+        					//Get the old score - we set the req.body score parameter to the previous score so that we can search for this rank.	
+        					req.body.score = previousScore.score;
+        					//We parse the score that we've already found so that we don't have to search for it again.
+        					_getRankingForScore(req, next, previousScore);
+        				}
         				incrementTrack(track);
-        				previousScore.rank = scoresGreaterOrEqualToThisScore.length+1;
-        				next(null, previousScore);
+        				
         			}
         			else if(previousScore == null){
         				console.log("Specified user has not played this track before, moving on to create a new score document.");
@@ -200,6 +206,36 @@ function _updatePreviousScore(req, next){
         	 next('error');
          }
 	 });
+}
+
+//--------------------------------------------
+//GET THE RANK FOR THE SCORE PROVIDED
+//--------------------------------------------
+function _getRankingForScore(req, next, score){
+	
+	if(score){
+		//Get all the scores for this track that are greater or equal to the score provided.
+		Score.find({trackkey:score.trackkey, score:{$gte:score.score}})
+		.lean()
+		.exec(
+				function (err, results) {
+					if(err){
+						console.log("There was a problem getting the rank for the score document provided.");
+					}
+					else if(results){
+						console.log("Using old rank for the score provided.");
+						score.rank = results.length;
+						next(null, score);
+					}
+					else{
+						console.log("There was a problem getting the rank for the score document provided.");
+					}
+				}
+		);
+	}
+	else{
+		console.log("A score document needs to be parsed in order to find the ranking.");
+	}
 }
 
 //--------------------------------------------
@@ -325,8 +361,6 @@ function saveNewHighscore(req, next){
 //QUERIES FOR EXISTING TRACKS BASED ON USERNAME
 //--------------------------------------------
 function getExistingTrack(trackkey, callback) {
-
- console.log('GET EXISTING TRACK');
 
  var promise = new mongoose.Promise;
  if (callback) promise.addBack(callback);
