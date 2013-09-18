@@ -5,6 +5,7 @@ var UserController = require('../controllers/UserController');
 var TrackController = require('../controllers/TrackController');
 var ScoreController = require('../controllers/ScoreController');
 var TournamentController = require('../controllers/TournamentController');
+var ProductController = require('../controllers/ProductController');
 
 var routes = {
     // --- USERS ---
@@ -29,7 +30,7 @@ var routes = {
         controller: TournamentController,
         action: 'createTournament'
     }
-}
+};
 
 var applicationRoutes = [
 
@@ -69,13 +70,49 @@ var applicationRoutes = [
         action: 'readUsers'
     },
 
-
     //DELETE USER
     {
         route: '/api/v1/user/:username',
-        method: 'del',
+        method: 'delete',
         controller: UserController,
         action: 'deleteUser'
+    },
+
+    
+    // ------------------------------------
+    // ------------- PRODUCTS -------------
+    // ------------------------------------
+
+    //CREATE PRODUCT
+    {
+        route: '/api/v1/products/:facebookID',
+        method: 'put',
+        controller: ProductController,
+        action: 'createProduct'
+    },
+
+    //UPDATE PRODUCT
+    {
+        route: '/api/v1/products/:facebookID',
+        method: 'post',
+        controller: ProductController,
+        action: 'updateProduct'
+    },
+
+    //GET PRODUCTS
+    {
+        route: '/api/v1/products/:facebookID',
+        method: 'get',
+        controller: ProductController,
+        action: 'readProduct'
+    },
+
+    //DELETE PRODUCT
+    {
+        route: '/api/v1/products/:facebookID',
+        method: 'delete',
+        controller: ProductController,
+        action: 'deleteProduct'
     },
 
 
@@ -85,26 +122,34 @@ var applicationRoutes = [
 
     //CREATE TRACK
     {
-        route: '/api/v1/track/:trackname',
+        route: '/api/v1/track/:trackkey',
         method: 'put',
         controller: TrackController,
         action: 'createTrack'
     },
 
-    //CREATE TRACK
+    //GET TRACK
     {
-        route: '/api/v1/track/:trackname',
+        route: '/api/v1/track/:trackkey',
         method: 'get',
         controller: TrackController,
         action: 'getTrack'
     },
 
-    //CREATE TRACKS
+    //GET TRACKS
     {
         route: '/api/v1/tracks',
         method: 'get',
         controller: TrackController,
         action: 'getTrackList'
+    },
+    
+  //DELETE ALL TRACKS
+    {
+        route: '/api/v1/tracks/clear',
+        method: 'delete',
+        controller: TrackController,
+        action: 'deleteAllTracks'
     },
 
 
@@ -126,8 +171,24 @@ var applicationRoutes = [
         method: 'get',
         controller: ScoreController,
         action: 'getScores'
+    },
+    
+  //GET SCORES FOR TRACK
+    {
+        route: '/api/v1/scores/:trackkey',
+        method: 'post',
+        controller: ScoreController,
+        action: 'getScoresForTrack'
+    },
+    
+    //REMOVE ALL SCORES FROM DATABASE
+    {
+        route: '/api/v1/scores/clear',
+        method: 'delete',
+        controller: ScoreController,
+        action: 'deleteAllScores'
     }
-]
+];
 
 
 
@@ -145,7 +206,7 @@ module.exports = function (app) {
         var action = controller[attrs.action];
 
 
-        console.log(route, method)
+        console.log(route, method);
 
 
         if (!method || !controller || !action) {
@@ -155,4 +216,4 @@ module.exports = function (app) {
 
 
     }
-}
+};

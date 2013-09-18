@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var Schema = mongoose.Schema
+var Schema = mongoose.Schema;
 
 var Score = Schema({
 
@@ -12,11 +12,17 @@ var Score = Schema({
 	],
 	score  : {
 		type   : Number,
-		default: 0
+		"default": 0
+	},
+	trackkey  : {
+		type   : String
 	},
 	created: {
 		type   : Date,
-		default: Date.now()
+		"default": Date.now()
+	},
+	rank: {
+		type   : Number
 	}
 });
 

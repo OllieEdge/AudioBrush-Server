@@ -3,7 +3,7 @@ var express = require('express'),
     path = require('path'),
     swig = require('swig'),
     cons = require('consolidate'),
-    fs = require('fs')
+    fs = require('fs');
 
 var app = express();
 

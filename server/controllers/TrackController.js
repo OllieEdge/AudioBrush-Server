@@ -8,24 +8,25 @@ module.exports = {
 
     createTrack: function (req, res) {
 
-        console.log('CREATE TRACK')
+        console.log('CREATE TRACK');
 
-        var trackname = sanitise.getTrackName(req)
-        var artist = sanitise.getArtistName(req)
+        var trackname = sanitise.getTrackName(req);
+        var artist = sanitise.getArtistName(req);
+        var trackkey = sanitise.trackkey(req.params.trackkey);
 
-        console.log('---------------------')
-        console.log(artist, trackname)
-        console.log('---------------------')
+        console.log('---------------------');
+        console.log(artist, trackname);
+        console.log('---------------------');
 
-        if (artist && trackname) {//if both artist and track exist from the request
+        if (artist && trackname && trackkey) {//if both artist and track exist from the request
 
-            getExistingTrack(trackname)
+            getExistingTrack(trackkey)
               .then(function (track) { //CHECK FOR EXISTING TRACK
                   if (track) {//if one exists return it
                       res.send(200, track);
                   }
                   else {//else save a new track
-                      return saveNewTrack({ trackname: trackname, artist: artist });
+                      return saveNewTrack({ trackname: trackname, artist: artist , trackkey: trackkey});
                   }
 
               })
@@ -34,9 +35,9 @@ module.exports = {
                       res.send(200, track);
                   }
                   else {
-                      error('no track', res)
+                      error('no track', res);
                   }
-              })
+              });
             /*.error(function (err) {
              //figure out mongoose promise errors
              res.send(400, err);
@@ -48,40 +49,56 @@ module.exports = {
     },
 
     getTrack: function (req, res) {
-        var trackname = sanitise.getTrackName(req)
+    	var trackkey = sanitise.trackkey(req.params.trackkey);
 
-        getExistingTrack(trackname)
+        getExistingTrack(trackkey)
           .then(function (track) {
               if (track) {
                   res.send(200, track);
               }
               else {
                   error('no track brah');
-                  res.send(200, {})
+                  res.send(200, {});
               }
-          })
+          });
     },
 
     getTrackList: function (req, res) {
 
-        var trackname = sanitise.getTrackName(req)
+        var trackname = sanitise.getTrackName(req);
         var filters = {
             trackname: (req.body.trackname ? req.body.trackname += '' : null),
             artist: (req.body.artist ? req.body.artist += '' : null),
             limit : (req.body.limit ? req.body.limit += '' : 10),
             sorter: '-plays'
-        }
+        };
 
 
         getTrackList(trackname, filters)
           .then(function (trackList) {
               res.send(200, trackList);
-          })
+          });
     },
+    
+    deleteAllTracks : function (req, res){
+		Track.find()
+		.exec(function (err, tracks) {
+			if (err) {
+				error(err, res);
+			}
+			else if (tracks) {
+				var i = tracks.length;
+				while (i--) {
+					tracks[i].remove();
+				}
+				res.send(200, {});
+			}
+		});
+	},
 
     updateTrack:function(req, res){}, //not needed right now
     deleteTrack:function(req, res){}  //not needed right now
-}
+};
 
 // --------------------------------------------
 // GET TRACKS
@@ -92,21 +109,23 @@ function getTrackList(trackname, filters, callback) {
     var promise = new mongoose.Promise;
     if (callback) promise.addBack(callback);
 
+    var que;
+    
     if (filters && filters.trackname){
-        var que = Track.find({trackname: filters.trackname})//find a tracklist
+        que = Track.find({trackname: filters.trackname});//find a tracklist
     }
     else{
-        var que = Track.find()//find a tracklist
+        que = Track.find();//find a tracklist
     }
 
     if (filters && filters.artist) { //if a filter for artist exists
         que.where('artist').equals(filters.artist);
     }
     if (filters && filters.sorter) { //if a sorter for artist exists
-        que.sort(filters.sorter)
+        que.sort(filters.sorter);
     }
     if (filters && filters.limit) { //if a limit
-        que.limit(filters.limit)
+        que.limit(filters.limit);
     }
 
     que.lean();
@@ -116,12 +135,12 @@ function getTrackList(trackname, filters, callback) {
             promise.error(err);//if error reject promise
         }
         else if (tracks) {//if track, increment by one
-            promise.complete(tracks)
+            promise.complete(tracks);
         }
         else {
-            promise.complete(null)//if no track return 0;
+            promise.complete(null);//if no track return 0;
         }
-    })
+    });
 
     return promise;
 }
@@ -131,28 +150,27 @@ function getTrackList(trackname, filters, callback) {
 // GET TRACK
 // QUERIES FOR EXISTING TRACKS BASED ON USERNAME
 // --------------------------------------------
-function getExistingTrack(trackname, callback) {
+function getExistingTrack(trackkey, callback) {
 
-    console.log('GET EXISTING TRACK')
+    console.log('GET EXISTING TRACK');
 
     var promise = new mongoose.Promise;
     if (callback) promise.addBack(callback);
 
-    Track.findOne({trackname: trackname})//find a track
+    Track.findOne({trackkey: trackkey})//find a track
       .exec(function (err, track) {
           if (err) {
               promise.error(err);//if error reject promise
           }
           else if (track) {//if track, increment by one
-              incrementTrack(track);
-              promise.complete(track)
+              promise.complete(track);
           }
           else {
-              promise.complete(null)//if no track return 0;
+              promise.complete(null);//if no track return 0;
           }
 
 
-      })
+      });
 
     return promise;
 }
@@ -167,8 +185,9 @@ function saveNewTrack(attributes, callback) {
 
     var track = new Track({ //else generate a new track object
         trackname: attributes.trackname,
-        artist   : attributes.artist
-    })
+        artist   : attributes.artist,
+        trackkey : attributes.trackkey
+    });
     track.save(function (err, track) {// and save it!
         if (err) {
             promise.error(err);
@@ -179,7 +198,7 @@ function saveNewTrack(attributes, callback) {
         else {
             promise.complete(null); //send the resulting track
         }
-    })
+    });
 
     return promise;
 }

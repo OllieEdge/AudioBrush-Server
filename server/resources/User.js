@@ -4,30 +4,34 @@ User = mongoose.Schema({
     username    : {
         type: String
     },
-    credits     : Number,
+    credits     : {
+        type: Number,
+        "default":40
+    },
     unlimited   : {
-        type: Boolean
+        type: Boolean,
+       "default":false
     },
     fb_id       : {
         type: Number,
-        index: true
+        index:true
     },
     role        : {
         type: String,
-        default: 'player'
+        "default": "player"
     },
     created: {
         type: Date,
-        default: Date.now(),
-        index: true
+        "default": Date.now(),
+        index:true
     },
     updated: {
         type: Date,
-        default: Date.now
+        "default": Date.now
     }
 });
 
-mongoose.model('User', User)
+mongoose.model('User', User);
 
 
 module.exports = mongoose.model('User');
