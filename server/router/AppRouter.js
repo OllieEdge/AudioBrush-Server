@@ -122,26 +122,34 @@ var applicationRoutes = [
 
     //CREATE TRACK
     {
-        route: '/api/v1/track/:trackname',
+        route: '/api/v1/track/:trackkey',
         method: 'put',
         controller: TrackController,
         action: 'createTrack'
     },
 
-    //CREATE TRACK
+    //GET TRACK
     {
-        route: '/api/v1/track/:trackname',
+        route: '/api/v1/track/:trackkey',
         method: 'get',
         controller: TrackController,
         action: 'getTrack'
     },
 
-    //CREATE TRACKS
+    //GET TRACKS
     {
         route: '/api/v1/tracks',
         method: 'get',
         controller: TrackController,
         action: 'getTrackList'
+    },
+    
+  //DELETE ALL TRACKS
+    {
+        route: '/api/v1/tracks/clear',
+        method: 'delete',
+        controller: TrackController,
+        action: 'deleteAllTracks'
     },
 
 
@@ -163,6 +171,22 @@ var applicationRoutes = [
         method: 'get',
         controller: ScoreController,
         action: 'getScores'
+    },
+    
+  //GET SCORES FOR TRACK
+    {
+        route: '/api/v1/scores/:trackkey',
+        method: 'get',
+        controller: ScoreController,
+        action: 'getScoresForTrack'
+    },
+    
+    //REMOVE ALL SCORES FROM DATABASE
+    {
+        route: '/api/v1/scores/clear',
+        method: 'delete',
+        controller: ScoreController,
+        action: 'deleteAllScores'
     }
 ];
 

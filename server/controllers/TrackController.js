@@ -12,20 +12,21 @@ module.exports = {
 
         var trackname = sanitise.getTrackName(req);
         var artist = sanitise.getArtistName(req);
+        var trackkey = sanitise.trackkey(req.params.trackkey);
 
         console.log('---------------------');
         console.log(artist, trackname);
         console.log('---------------------');
 
-        if (artist && trackname) {//if both artist and track exist from the request
+        if (artist && trackname && trackkey) {//if both artist and track exist from the request
 
-            getExistingTrack(trackname)
+            getExistingTrack(trackkey)
               .then(function (track) { //CHECK FOR EXISTING TRACK
                   if (track) {//if one exists return it
                       res.send(200, track);
                   }
                   else {//else save a new track
-                      return saveNewTrack({ trackname: trackname, artist: artist });
+                      return saveNewTrack({ trackname: trackname, artist: artist , trackkey: trackkey});
                   }
 
               })
@@ -48,9 +49,9 @@ module.exports = {
     },
 
     getTrack: function (req, res) {
-        var trackname = sanitise.getTrackName(req);
+    	var trackkey = sanitise.trackkey(req.params.trackkey);
 
-        getExistingTrack(trackname)
+        getExistingTrack(trackkey)
           .then(function (track) {
               if (track) {
                   res.send(200, track);
@@ -78,6 +79,22 @@ module.exports = {
               res.send(200, trackList);
           });
     },
+    
+    deleteAllTracks : function (req, res){
+		Track.find()
+		.exec(function (err, tracks) {
+			if (err) {
+				error(err, res);
+			}
+			else if (tracks) {
+				var i = tracks.length;
+				while (i--) {
+					tracks[i].remove();
+				}
+				res.send(200, {});
+			}
+		});
+	},
 
     updateTrack:function(req, res){}, //not needed right now
     deleteTrack:function(req, res){}  //not needed right now
@@ -133,14 +150,14 @@ function getTrackList(trackname, filters, callback) {
 // GET TRACK
 // QUERIES FOR EXISTING TRACKS BASED ON USERNAME
 // --------------------------------------------
-function getExistingTrack(trackname, callback) {
+function getExistingTrack(trackkey, callback) {
 
     console.log('GET EXISTING TRACK');
 
     var promise = new mongoose.Promise;
     if (callback) promise.addBack(callback);
 
-    Track.findOne({trackname: trackname})//find a track
+    Track.findOne({trackkey: trackkey})//find a track
       .exec(function (err, track) {
           if (err) {
               promise.error(err);//if error reject promise
@@ -169,7 +186,8 @@ function saveNewTrack(attributes, callback) {
 
     var track = new Track({ //else generate a new track object
         trackname: attributes.trackname,
-        artist   : attributes.artist
+        artist   : attributes.artist,
+        trackkey : attributes.trackkey
     });
     track.save(function (err, track) {// and save it!
         if (err) {

@@ -33,10 +33,16 @@ module.exports = { //general input validation
     credits      : function (credits) {
         return credits;
     },
+    trackkey      : function (trackkey) {
+        return trackkey;
+    },
     getTrackName : function (req) {
-        return req.params.trackname ? req.params.trackname : null;
+        return req.body.trackname ? req.body.trackname : null;
     },
     getArtistName: function (req) {
         return req.body.artist ? req.body.artist : null;
+    },
+    getTrackKey: function (req) {
+        return req.body.trackkey ? req.body.trackkey : null;
     }
 };

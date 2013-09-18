@@ -4,9 +4,11 @@ mongoose = require('mongoose');
 var Track = mongoose.Schema({
     trackname       : {
         type: String,
-        index: true
     },
     artist     : {
+        type: String,
+    },
+    trackkey     : {
         type: String,
         index: true
     },
