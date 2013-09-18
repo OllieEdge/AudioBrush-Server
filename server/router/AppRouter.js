@@ -144,6 +144,14 @@ var applicationRoutes = [
         action: 'getTrackList'
     },
     
+  //SEARCH TRACKS
+    {
+        route: '/api/v1/tracks/search/:search',
+        method: 'get',
+        controller: TrackController,
+        action: 'searchTracks'
+    },
+    
   //DELETE ALL TRACKS
     {
         route: '/api/v1/tracks/clear',

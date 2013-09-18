@@ -48,6 +48,27 @@ module.exports = {
         }
     },
 
+    searchTracks: function (req, res) {
+    	var searchCriteria = sanitise.search(req.params.search);
+    	var re = new RegExp(searchCriteria, 'i');
+    	
+    	Track
+    		.find()
+    		.where('artist')//NEED TO ADD TRACK NAME TOO, BUT I HAVE NO IDEA HOW TO DO THIS...OLLIE.
+    		.regex(re)
+    		.exec(function (err, tracks){
+    			if(err){
+    				error("No tracks found");
+    			}
+    			else if(tracks){
+    				res.send(200, tracks);
+    			}
+    			else{
+    				error("No tracks found");
+    			}
+    		});
+    },
+    
     getTrack: function (req, res) {
     	var trackkey = sanitise.trackkey(req.params.trackkey);
 
