@@ -55,7 +55,7 @@ module.exports = {
     	
     	Track
     		.find()
-    		.where('artist')//NEED TO ADD TRACK NAME TOO, BUT I HAVE NO IDEA HOW TO DO THIS...OLLIE.
+    		.where('trackkey')//NEED TO ADD TRACK NAME TOO, BUT I HAVE NO IDEA HOW TO DO THIS...OLLIE.
     		.regex(re)
     		.exec(function (err, tracks){
     			if(err){
@@ -83,6 +83,48 @@ module.exports = {
                   res.send(200, {});
               }
           });
+    },
+    
+    getLatestTracks : function (req, res){
+
+    	var re = new RegExp("tournament_", 'i');
+    	
+    	Track
+    	.find({trackkey : {$not : re } } )
+		.limit(50)
+		.sort('-last_update')
+		.exec(function (err, tracks){
+			if(err){
+				error("No tracks found");
+			}
+			else if(tracks){
+				res.send(200, tracks);
+			}
+			else{
+				error("No tracks found");
+			}
+		});
+    },
+    
+    getPopularTracks : function (req, res){
+    	
+    	var re = new RegExp("tournament_", 'i');
+    	
+    	Track
+    	.find({trackkey : {$not : re } } )
+		.limit(50)
+		.sort('-plays')
+		.exec(function (err, tracks){
+			if(err){
+				error("No tracks found");
+			}
+			else if(tracks){
+				res.send(200, tracks);
+			}
+			else{
+				error("No tracks found");
+			}
+		});
     },
 
     getTrackList: function (req, res) {
@@ -121,7 +163,9 @@ module.exports = {
     					for(var i = 0; i < users.length;i++){
         					for(var t = 0; t < users[i].tracks.length; t++){
         						if(tracks.indexOf(users[i].tracks[t] < 0)){
-        							tracks.push(users[i].tracks[t]);
+        							if(users[i].tracks[t].indexOf("tournament_") == -1){
+        								tracks.push(users[i].tracks[t]);
+        							}
         						}
         					}
         				}
