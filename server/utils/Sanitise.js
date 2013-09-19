@@ -39,6 +39,9 @@ module.exports = { //general input validation
     search      : function (search) {
         return search;
     },
+    facebookIDs : function (facebookIDs){
+    	return facebookIDs;
+    },
     getTrackName : function (req) {
         return req.body.trackname ? req.body.trackname : null;
     },
