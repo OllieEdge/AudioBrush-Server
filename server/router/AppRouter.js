@@ -145,6 +145,22 @@ var applicationRoutes = [
         action: 'getTrackList'
     },
     
+  //GET TRACKS LATEST
+    {
+        route: '/api/v1/tracks/latest',
+        method: 'get',
+        controller: TrackController,
+        action: 'getLatestTracks'
+    },
+    
+  //GET TRACKS POPULAR
+    {
+        route: '/api/v1/tracks/popular',
+        method: 'get',
+        controller: TrackController,
+        action: 'getPopularTracks'
+    },
+    
     //GET FRIENDS TRACKS
     {
         route: '/api/v1/tracks/related',
@@ -198,6 +214,14 @@ var applicationRoutes = [
         action: 'getScoresForTrack'
     },
     
+  //GET SCORES FOR TRACK AND FRIENDS
+    {
+        route: '/api/v1/scores/related/:trackkey',
+        method: 'post',
+        controller: ScoreController,
+        action: 'getScoresForTrackWithUserIDs'
+    },
+    
     //REMOVE ALL SCORES FROM DATABASE
     {
         route: '/api/v1/scores/clear',
@@ -206,9 +230,19 @@ var applicationRoutes = [
         action: 'deleteAllScores'
     },
     
+    // ------------------------------------
+    // ----------- TOURNAMENTS -----------
+    // ------------------------------------
+    {
+        route: '/api/v1/tournament/leader/:tournamentid',
+        method: 'get',
+        controller: TournamentController,
+        action: 'getTournamentLeader'
+    },
+    
     
     // ------------------------------------
-    // -------- TOURNAMENTS DATA ---------
+    // --------- TOURNAMENTS DATA --------
     // ------------------------------------
 
     //CREATE TOURNAMENT DATA

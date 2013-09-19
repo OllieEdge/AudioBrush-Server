@@ -96,6 +96,43 @@ module.exports = {
 			});
 	},
 	
+	//Get the scores for the specified track and sort by score descending
+	getScoresForTrackWithUserIDs : function (req, res){
+		
+		var searchTrackkey = sanitise.trackkey(req.params.trackkey);
+		var friendFacebookIDs = sanitise.facebookIDs(req.body.friends);
+		var friendScores = new Array();
+		
+		Score.find({trackkey:searchTrackkey})
+			.lean()
+			.populate('trackId')
+			.populate('userId')
+			.select('userId trackId score')
+			.sort('-score')
+			.exec(function (err, scores) {
+				if (err) {
+					console.log("There was an error gets the friends score for this track");
+					error(err, res);
+				}
+				else if (scores) {
+					for(var i = 0; i < friendFacebookIDs.length;i++){
+    					for(var t = 0; t < scores.length; t++){
+    						if(scores[t].userId[0].fb_id == parseInt(friendFacebookIDs[i])){
+    							scores[t].rank = scores.indexOf(scores[t])+1;
+    							friendScores.push(scores[t]);
+    							break;
+    						}
+    					}
+    				}
+					res.send(200, friendScores);
+				}
+				else{
+					console.log("There was an error gets the friends score for this track");
+					error(err, res);
+				}
+			});
+	},
+	
 	deleteAllScores : function (req, res){
 		Score.find()
 		.exec(function (err, scores) {
