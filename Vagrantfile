@@ -8,10 +8,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.box = "precise64"
 
-  #config.vm.network :forwarded_port, guest: 1234,  host: 1234
-  #config.vm.network :forwarded_port, guest: 8080,  host: 8080
-  #config.vm.network :forwarded_port, guest: 3000,  host: 3000
-  #config.vm.network :forwarded_port, guest: 55281, host: 55281
+  config.vm.network :forwarded_port, guest: 1234,  host: 1234
+  config.vm.network :forwarded_port, guest: 8080,  host: 8080
+  config.vm.network :forwarded_port, guest: 3000,  host: 3000
+  config.vm.network :forwarded_port, guest: 55281, host: 55281
 
   config.vm.network :private_network, ip: "192.168.33.10"
 

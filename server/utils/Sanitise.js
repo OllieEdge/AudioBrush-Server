@@ -36,6 +36,12 @@ module.exports = { //general input validation
     trackkey      : function (trackkey) {
         return trackkey;
     },
+    search      : function (search) {
+        return search;
+    },
+    facebookIDs : function (facebookIDs){
+    	return facebookIDs;
+    },
     getTrackName : function (req) {
         return req.body.trackname ? req.body.trackname : null;
     },

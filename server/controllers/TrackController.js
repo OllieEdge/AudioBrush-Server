@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Track = mongoose.model('Track');
+var User = mongoose.model('User');
 
 var error = require('../utils/Error');
 var sanitise = require('../utils/Sanitise');
@@ -48,6 +49,27 @@ module.exports = {
         }
     },
 
+    searchTracks: function (req, res) {
+    	var searchCriteria = sanitise.search(req.params.search);
+    	var re = new RegExp(searchCriteria, 'i');
+    	
+    	Track
+    		.find()
+    		.where('artist')//NEED TO ADD TRACK NAME TOO, BUT I HAVE NO IDEA HOW TO DO THIS...OLLIE.
+    		.regex(re)
+    		.exec(function (err, tracks){
+    			if(err){
+    				error("No tracks found");
+    			}
+    			else if(tracks){
+    				res.send(200, tracks);
+    			}
+    			else{
+    				error("No tracks found");
+    			}
+    		});
+    },
+    
     getTrack: function (req, res) {
     	var trackkey = sanitise.trackkey(req.params.trackkey);
 
@@ -78,6 +100,54 @@ module.exports = {
           .then(function (trackList) {
               res.send(200, trackList);
           });
+    },
+    
+    getFriendTracks: function (req, res) {
+    	
+    	var friendFacebookIDs = sanitise.facebookIDs(req.body.friends);
+    	
+    	if(friendFacebookIDs){
+    		var tracks = new Array();
+    		
+    		User
+    			.find({fb_id : {$in : friendFacebookIDs}})
+    			.lean()
+    			.exec( function (err, users){
+    				if(err){
+    					console.log("There was a problem trying to get the friends of the user");
+    				}
+    				else if(users){
+    					console.log("Filtering tracks from users friends");
+    					for(var i = 0; i < users.length;i++){
+        					for(var t = 0; t < users[i].tracks.length; t++){
+        						if(tracks.indexOf(users[i].tracks[t] < 0)){
+        							tracks.push(users[i].tracks[t]);
+        						}
+        					}
+        				}
+    					
+    					Track
+    	    			.find({trackkey: {$in : tracks}})
+    	    			.lean()
+    	    			.exec( function(err, tracksFound){
+    	    				if(err){
+    	    					console.log("There was an issue populating the tracks from the users friends");
+    	    				}
+    	    				else if(tracksFound){
+    	    					res.send(200, tracksFound);
+    	    				}
+    	    				else{
+    	    					console.log("There was an issue populating the tracks from the users friends");
+    	    				}
+    	    			});
+    					
+    				}
+    				else{
+    					console.log("There was a problem trying to get the friends of the user");
+    				}
+    			});
+    	}
+    	
     },
     
     deleteAllTracks : function (req, res){

@@ -5,6 +5,7 @@ var UserController = require('../controllers/UserController');
 var TrackController = require('../controllers/TrackController');
 var ScoreController = require('../controllers/ScoreController');
 var TournamentController = require('../controllers/TournamentController');
+var TournamentDataController = require('../controllers/TournamentDataController');
 var ProductController = require('../controllers/ProductController');
 
 var routes = {
@@ -144,6 +145,22 @@ var applicationRoutes = [
         action: 'getTrackList'
     },
     
+    //GET FRIENDS TRACKS
+    {
+        route: '/api/v1/tracks/related',
+        method: 'post',
+        controller: TrackController,
+        action: 'getFriendTracks'
+    },
+    
+  //SEARCH TRACKS
+    {
+        route: '/api/v1/tracks/search/:search',
+        method: 'get',
+        controller: TrackController,
+        action: 'searchTracks'
+    },
+    
   //DELETE ALL TRACKS
     {
         route: '/api/v1/tracks/clear',
@@ -187,6 +204,40 @@ var applicationRoutes = [
         method: 'delete',
         controller: ScoreController,
         action: 'deleteAllScores'
+    },
+    
+    
+    // ------------------------------------
+    // -------- TOURNAMENTS DATA ---------
+    // ------------------------------------
+
+    //CREATE TOURNAMENT DATA
+    {
+        route: '/api/v1/tournament/admin',
+        method: 'put',
+        controller: TournamentDataController,
+        action: 'createTournament'
+    },
+  //GET ALL TOURNAMENTS
+    {
+        route: '/api/v1/tournaments/all',
+        method: 'get',
+        controller: TournamentDataController,
+        action: 'getAllTournaments'
+    },
+  //GET ACTIVE TOURNAMENTS
+    {
+        route: '/api/v1/tournaments/active',
+        method: 'get',
+        controller: TournamentDataController,
+        action: 'getActiveTournaments'
+    },
+    //DELETE TOURNAMENT DATA
+    {
+        route: '/api/v1/tournament/admin/:tournamentid',
+        method: 'delete',
+        controller: TournamentDataController,
+        action: 'deleteTournament'
     }
 ];
 
