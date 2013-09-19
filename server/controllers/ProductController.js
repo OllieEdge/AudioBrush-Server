@@ -116,7 +116,7 @@ module.exports = {
         
         var newProductID = req.body.productID ? sanitise.productID(req.body.productID) : null;
         
-        if (facebookID) {
+        if (facebookID && newProductID) {
             Product
             	.findOne({ fb_id: facebookID, productID: newProductID})
             	.exec(function (err, product) {
