@@ -206,9 +206,19 @@ var applicationRoutes = [
         action: 'deleteAllScores'
     },
     
+    // ------------------------------------
+    // ----------- TOURNAMENTS -----------
+    // ------------------------------------
+    {
+        route: '/api/v1/tournament/leader/:tournamentid',
+        method: 'get',
+        controller: TournamentController,
+        action: 'getTournamentLeader'
+    },
+    
     
     // ------------------------------------
-    // -------- TOURNAMENTS DATA ---------
+    // --------- TOURNAMENTS DATA --------
     // ------------------------------------
 
     //CREATE TOURNAMENT DATA
