@@ -313,7 +313,7 @@ function saveNewHighscore(req, next){
 		},
 		function (callback) {
 			//We need this so that we can add the user reference to the score document.
-			return User.findOne({fb_id: facebookID}).lean().exec(callback);
+			return User.findOne({fb_id: facebookID}).exec(callback);
 		},
 		function (callback) {
  			//This finds all the scores greater or equal to the one that we're posting. used for ranking
@@ -333,6 +333,8 @@ function saveNewHighscore(req, next){
 					next('error');
 				}
 				else {
+					user.tracks.push(track.trackkey);
+					user.save();
 					console.log("Saved new score.");
 					score.rank = scoresGreaterOrEqualToThisScore.length+1;
 					incrementTrack(track);

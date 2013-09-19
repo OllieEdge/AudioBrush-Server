@@ -20,6 +20,9 @@ User = mongoose.Schema({
         type: String,
         "default": "player"
     },
+    tracks	: {
+    	type: []
+    },
     created: {
         type: Date,
         "default": Date.now(),
