@@ -331,10 +331,6 @@ module.exports = function (app) {
         var controller = attrs.controller;
         var action = controller[attrs.action];
 
-
-        console.log(route, method);
-
-
         if (!method || !controller || !action) {
             return;
         }

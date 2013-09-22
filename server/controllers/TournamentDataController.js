@@ -5,6 +5,7 @@ var TournamentData = mongoose.model('TournamentData');
 var error = require('../utils/Error');
 var sanitise = require('../utils/Sanitise');
 
+var sendNotificationToAll = require('../utils/sendNotificationToAll');
 
 module.exports = {
     //  CREATE PRODUCT
@@ -39,6 +40,7 @@ module.exports = {
 	    		}
 	    		else if(tournament){
 	    			res.send(200, tournament);
+				    sendNotifcationToAll()
 	    		}
 	    		else{
 	    			console.log("There was a problem when creating the tournament in the database");
