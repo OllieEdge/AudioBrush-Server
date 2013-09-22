@@ -7,6 +7,7 @@ var ScoreController = require('../controllers/ScoreController');
 var TournamentController = require('../controllers/TournamentController');
 var TournamentDataController = require('../controllers/TournamentDataController');
 var ProductController = require('../controllers/ProductController');
+var GiftController = require('../controllers/GiftController');
 
 var routes = {
     // --- USERS ---
@@ -77,6 +78,46 @@ var applicationRoutes = [
         method: 'delete',
         controller: UserController,
         action: 'deleteUser'
+    },
+    
+    // ------------------------------------
+    // --------------- GIFTS ---------------
+    // ------------------------------------
+
+    //CREATE GIFTS
+    {
+        route: '/api/v1/gift',
+        method: 'put',
+        controller: GiftController,
+        action: 'sendGift'
+    },
+  //GET ALL GIFTS
+    {
+        route: '/api/v1/gift/:userid',
+        method: 'get',
+        controller: GiftController,
+        action: 'getAllGiftsForUser'
+    },
+  //GET ALL GIFTS
+    {
+        route: '/api/v1/gift',
+        method: 'get',
+        controller: GiftController,
+        action: 'getAllGifts'
+    },
+  //ACCEPT AND SEND GIFTS
+    {
+        route: '/api/v1/gift',
+        method: 'post',
+        controller: GiftController,
+        action: 'acceptAndSendGift'
+    },
+    //DELETE ALL GIFTS
+    {
+        route: '/api/v1/gift',
+        method: 'delete',
+        controller: GiftController,
+        action: 'deleteAllGifts'
     },
 
     
