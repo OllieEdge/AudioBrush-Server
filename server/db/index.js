@@ -1,4 +1,8 @@
 var mongoose = require('mongoose');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+
+
 var User = require('../resources/User');
 var Track = require('../resources/Track');
 var Score = require('../resources/Score');
@@ -21,5 +25,11 @@ mongoose.connection.on('connected', function (data) {
 //	console.log('MONGOOSE CONNECTED <---')
 //	console.log(data)
 });
+
+
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 mongoose.connect('localhost', 'audiobrush');

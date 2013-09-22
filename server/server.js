@@ -1,9 +1,10 @@
 var express = require('express'),
-    http  = require('http'),
-    path  = require('path'),
-    swig  = require('swig'),
-    cons  = require('consolidate'),
-    fs    = require('fs');
+	http = require('http'),
+	path = require('path'),
+	swig = require('swig'),
+	cons = require('consolidate'),
+	fs = require('fs'),
+	passport = require('passport');
 
 var app = express();
 
@@ -14,10 +15,10 @@ app.set('port', process.env.PORT || 3000);
 
 swig.cache = {};
 swig.init({
-    root: 'public/views',
-    allowErrors: true,
-    cache: false,
-    filters: {}
+	root       : 'public/views',
+	allowErrors: true,
+	cache      : false,
+	filters    : {}
 });
 
 app.engine('.html', cons.swig);
@@ -28,15 +29,23 @@ app.set('view cache', false);
 
 //app.use(express.logger({stream: expressLogFile}));
 app.use(express.favicon());
+
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
+
+app.use(express.cookieParser('OLLIE-SUCKS-COCK-FOR-CRACK'));
+app.use(express.session());
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
 // development only
 if ('development' == app.get('env')) {
-    app.use(express.errorHandler());
+	app.use(express.errorHandler());
 }
 
 //  --- DB ---
@@ -47,6 +56,5 @@ var router = require('./router/AppRouter')(app);
 //router.setup(app);
 
 app.set('Router', router);
-
 
 module.exports = app;

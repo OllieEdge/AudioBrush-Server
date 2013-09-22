@@ -49,10 +49,7 @@ module.exports = function(config){
 
 					});
 
-
 				}
-
-
 
 			}
 

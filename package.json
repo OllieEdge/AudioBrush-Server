@@ -20,6 +20,9 @@
     "assert": "~0.4.9",
     "underscore": "~1.5.2",
     "q": "~0.9.7",
-    "urban-airship": "~0.2.5"
+    "urban-airship": "~0.2.5",
+    "passport": "~0.1.17",
+    "passport-local": "~0.1.6",
+    "passport-local-mongoose": "~0.2.4"
   }
 }

@@ -1,4 +1,5 @@
-mongoose = require('mongoose');
+var mongoose = require('mongoose');
+var passportLocalMongoose = require('passport-local-mongoose');
 
 User = mongoose.Schema({
     username    : {
@@ -38,6 +39,7 @@ User = mongoose.Schema({
     }
 });
 
+User.plugin(passportLocalMongoose);
 mongoose.model('User', User);
 
 

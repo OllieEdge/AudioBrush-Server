@@ -1,4 +1,3 @@
-
 var mongoose = require('mongoose');
 var Gift = mongoose.model('Gift');
 var User = mongoose.model('User');
@@ -15,10 +14,10 @@ module.exports = {
     //  ------------------------
     sendGift: function (req, res) {
     	
-    	var receivers = req.body.to;//this can be many people
-    	var senderFB_ID = req.body.from;
-    	var credits = req.body.credits; //we need to make sure this value hasn't been altered
-    	var product = req.body.productID;
+    	var receivers       = req.body.to;        //this can be many people
+    	var senderFB_ID     = req.body.from;
+    	var credits         = req.body.credits;   //we need to make sure this value hasn't been altered
+    	var product         = req.body.productID;
     	var productQuantity = req.body.productQuantity;
     	
     	//For some reason when sending a single value in an array 
@@ -40,7 +39,8 @@ module.exports = {
     	
     	//This point we can check if the gift is still valid, and if it's not
     	//We can then remove it before it gets sent to the client.
-		Gift.find({'to':userID})
+		Gift
+		.find({'to':userID})
 		.populate('from')
 		.exec(function (err, gifts) {
 			if (err) {
@@ -216,15 +216,16 @@ function sendGifts(receivers, senderFB_ID, credits, product, productQuantity, re
     	var gifts = new Array();
     	
     	//First we get the send details from the parsed facebookID
-    	User
-		.find({fb_id : senderFB_ID})
-		.select('_id')
-		.lean()
-		.exec( function (err, sender){
-			if(err){
-				console.log("501: There was a problem getting the sender details");
-				res.send(501, "There was a problem getting the sender details");
-			}
+    User
+			.find({fb_id : senderFB_ID})
+			.select('_id')
+			.lean()
+			.exec( function (err, sender){
+				if(err){
+					console.log("501: There was a problem getting the sender details");
+					res.send(501, "There was a problem getting the sender details");
+				}
+
 			else if(sender){
 				
 				//Then we need to get all of the receipients from the parsed array
