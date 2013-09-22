@@ -104,6 +104,7 @@ module.exports = {
         var newUsername = req.body.username ? sanitise.username(req.body.username) : null;
         var newCredits = req.body.credits ? sanitise.credits(req.body.credits) : null;
         var newUnlimited = req.body.unlimited ? sanitise.unlimited(req.body.unlimited) : null;
+        var airshipToken = req.body.airship_token;
 
         if (facebookID) {
             User
@@ -117,6 +118,7 @@ module.exports = {
                         user.username = newUsername ? newUsername : user.username;
                         user.credits = newCredits ? newCredits : user.credits;
                         user.unlimited = newUnlimited ? newUnlimited : user.credits;
+                        user.airship_token = airshipToken;
                         user.save(function (err, user) {
                             if (err) {
                                 error(err, res);

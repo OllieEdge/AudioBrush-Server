@@ -5,6 +5,7 @@ var Score = require('../resources/Score');
 var Product = require('../resources/Product');
 var Tournament = require('../resources/Tournament');
 var TournamentData = require('../resources/TournamentData');
+var Gift = require('../resources/Gift');
 
 mongoose.connection.on('error', function (err) {
 //	console.log('MONGOOSE CONNECTION ERROR <---')

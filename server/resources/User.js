@@ -31,6 +31,10 @@ User = mongoose.Schema({
     updated: {
         type: Date,
         "default": Date.now
+    },
+    airship_token: {
+        type: String,
+        "default": ""
     }
 });
 
