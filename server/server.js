@@ -1,9 +1,9 @@
 var express = require('express'),
-    http = require('http'),
-    path = require('path'),
-    swig = require('swig'),
-    cons = require('consolidate'),
-    fs = require('fs');
+    http  = require('http'),
+    path  = require('path'),
+    swig  = require('swig'),
+    cons  = require('consolidate'),
+    fs    = require('fs');
 
 var app = express();
 
@@ -50,10 +50,10 @@ app.set('Router', router);
 
 
 //  -----------------------------------------
-//  uncomment this to debug the push
-//  notification for all users
+//    uncomment this to debug the push
+//    notification for all users
 //  -----------------------------------------
-//  require('./utils/sendNotificationToAll')()
+//    require('./utils/sendNotificationToAll')()
 //  -----------------------------------------
 
 

@@ -27,8 +27,8 @@ module.exports = function(){
 					for(var i in users){
 
 						var user = users[i];
-						tokens.push(user.airship_token);
 
+						if(user.airship_token) tokens.push(user.airship_token);
 
 					}
 
