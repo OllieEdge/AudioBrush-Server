@@ -49,12 +49,4 @@ var router = require('./router/AppRouter')(app);
 app.set('Router', router);
 
 
-//  -----------------------------------------
-//    uncomment this to debug the push
-//    notification for all users
-//  -----------------------------------------
-//    require('./utils/sendNotificationToAll')()
-//  -----------------------------------------
-
-
 module.exports = app;

@@ -40,7 +40,12 @@ module.exports = {
 	    		}
 	    		else if(tournament){
 	    			res.send(200, tournament);
-				    sendNotifcationToAll()
+
+				    sendNotifcationToAll({
+					    "alert": "Calling Urban Airship!",
+					    "badge": 2
+				    })
+
 	    		}
 	    		else{
 	    			console.log("There was a problem when creating the tournament in the database");

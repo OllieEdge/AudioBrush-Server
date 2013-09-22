@@ -10,7 +10,7 @@ var ua = new UA("iaRoXjpsTdWiUTGHik_Paw",
 								"oZAfBlMzSXyp6D_2umIE_g",
 								"Kh94h34eTqS4y97_EARfWQ");
 
-module.exports = function(){
+module.exports = function(config){
 
 	User
 		.find()
@@ -38,10 +38,7 @@ module.exports = function(){
 
 					var payload = {
 						"device_tokens": tokens,
-						"aps": {
-							"alert": "Calling Urban Airship!",
-							"badge": 2
-						}
+						"aps": config
 					}
 
 
