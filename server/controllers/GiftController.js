@@ -7,6 +7,8 @@ var Product = mongoose.model('Product');
 var error = require('../utils/Error');
 var sanitise = require('../utils/Sanitise');
 
+var sendNotificationTo = require('../utils/sendNotificationTo');
+
 var GIFT_LIFESPAN_DAYS = 5;
 var MAXIMUM_CREDITS_ALLOWED = 5;
 
@@ -134,6 +136,11 @@ module.exports = {
 							credits:credits});
 					gift.save();
 					
+					sendNotificationTo({
+	        			"alert": gifts[i].to.username + " has sent you a gift! Login now to claim and thank your buddy.",
+	        			"badge": 1
+	        		}, gifts[i].from.airship_token);
+					
 					//Add the credits to the total awarded
 					if(gifts[i].credits > 0){
 						creditsAwarded += gifts[i].credits;
@@ -256,6 +263,10 @@ function sendGifts(receivers, senderFB_ID, credits, product, productQuantity, re
 			        			productQuantity:productQuantity});
 			        		gift.save();
 			        		gifts.push(gift);
+			        		sendNotificationTo({
+			        			"alert": sender[0].username + " has sent you a gift! Login now to claim and thank your buddy.",
+			        			"badge": 1
+			        		}, users[i].airship_token);
 			        	}
 						
 						res.send(200, gifts);

@@ -42,9 +42,9 @@ module.exports = {
 	    			res.send(200, tournament);
 
 				    sendNotifcationToAll({
-					    "alert": "Calling Urban Airship!",
+					    "alert": "There are new Tournaments available! Play now to get your name on the leaderboard!",
 					    "badge": 2
-				    })
+				    });
 
 	    		}
 	    		else{

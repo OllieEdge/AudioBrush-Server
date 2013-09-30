@@ -39,13 +39,13 @@ module.exports = function(config){
 					var payload = {
 						"device_tokens": tokens,
 						"aps": config
-					}
+					};
 
 
 					ua.pushNotification("/api/push", payload, function(err) {
 
 						if(err) console.log(err);
-						else console.log('this has worked')
+						else console.log('this has worked');
 
 					});
 
@@ -56,6 +56,6 @@ module.exports = function(config){
 
 			}
 
-		})
+		});
 
-}
+};
