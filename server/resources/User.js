@@ -35,6 +35,10 @@ User = mongoose.Schema({
     airship_token: {
         type: String,
         "default": ""
+    },
+    xp       : {
+        type: Number,
+        "default": 0
     }
 });
 

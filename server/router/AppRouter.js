@@ -80,6 +80,14 @@ var applicationRoutes = [
         action: 'deleteUser'
     },
     
+  //DELETE USER
+    {
+        route: '/api/v1/users',
+        method: 'delete',
+        controller: UserController,
+        action: 'deleteAllUsers'
+    },
+    
     // ------------------------------------
     // --------------- GIFTS ---------------
     // ------------------------------------

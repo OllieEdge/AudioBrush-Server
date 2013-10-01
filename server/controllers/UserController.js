@@ -158,5 +158,24 @@ module.exports = {
                 
             });
         }
-    }
+    },
+    
+    //  DELETE ALL USERS
+    //  ------------------------
+    deleteAllUsers : function (req, res){
+		User.find()
+		.exec(function (err, users) {
+			if (err) {
+				error(err, res);
+			}
+			else if (users) {
+				var i = users.length;
+				while (i--) {
+					users[i].remove();
+				}
+				res.send(200, {});
+			}
+		});
+	},
+    
 };
