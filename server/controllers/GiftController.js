@@ -122,24 +122,26 @@ module.exports = {
 				var userID = gifts[0].to._id;
 				//We'll need this for the products if there are any
 				var facebookID = gifts[0].to.fb_id;
+				
 				while(i--){
 					
-					
-					//Let's send the gift back, so we need to switch around the to/from properties.
-					//This is where we can update Push Notifications "gifts[i].from.airship_token"
-					//contains the token of the new receipient
-					var gift = new Gift(
-							{to:gifts[i].from._id,
-							from:gifts[i].to._id,
-							sent:today,
-							expires:expiry,
-							credits:credits});
-					gift.save();
-					
-					sendNotificationTo({
-	        			"alert": gifts[i].to.username + " has sent you a gift! Login now to claim and thank your buddy.",
-	        			"badge": 1
-	        		}, gifts[i].from.airship_token);
+					if(gifts[i].admin == ""){
+						//Let's send the gift back, so we need to switch around the to/from properties.
+						//This is where we can update Push Notifications "gifts[i].from.airship_token"
+						//contains the token of the new receipient
+						var gift = new Gift(
+								{to:gifts[i].from._id,
+								from:gifts[i].to._id,
+								sent:today,
+								expires:expiry,
+								credits:credits});
+						gift.save();
+						
+						sendNotificationTo({
+		        			"alert": gifts[i].to.username + " has sent you a gift! Login now to claim and thank your buddy.",
+		        			"badge": 1
+		        		}, gifts[i].from.airship_token);
+					}
 					
 					//Add the credits to the total awarded
 					if(gifts[i].credits > 0){

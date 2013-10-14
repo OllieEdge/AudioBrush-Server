@@ -8,6 +8,7 @@ var TournamentController = require('../controllers/TournamentController');
 var TournamentDataController = require('../controllers/TournamentDataController');
 var ProductController = require('../controllers/ProductController');
 var GiftController = require('../controllers/GiftController');
+var AchievementController = require('../controllers/AchievementController');
 
 var routes = {
     // --- USERS ---
@@ -50,7 +51,7 @@ var applicationRoutes = [
 
     //UPDATE USER
     {
-        route: '/api/v1/user/:username',
+        route: '/api/v1/user/update/:username',
         method: 'post',
         controller: UserController,
         action: 'updateUser'
@@ -59,7 +60,7 @@ var applicationRoutes = [
     //GET USER
     {
         route: '/api/v1/user/:username',
-        method: 'get',
+        method: 'post',
         controller: UserController,
         action: 'readUser'
     },
@@ -87,6 +88,62 @@ var applicationRoutes = [
         controller: UserController,
         action: 'deleteAllUsers'
     },
+   
+    // ------------------------------------
+    // --------------- BONUS --------------
+    // ------------------------------------
+    //GET BONUS STATUS
+    {
+        route: '/api/v1/user/bonus/:facebookid',
+        method: 'get',
+        controller: UserController,
+        action: 'getBonusStatus'
+    },
+    
+    //COLLECT BONUS 
+    {
+        route: '/api/v1/user/bonus/:facebookid',
+        method: 'post',
+        controller: UserController,
+        action: 'collectBonus'
+    },
+    
+    // ------------------------------------
+    // ----------- ACHIEVEMENTS ----------
+    // ------------------------------------
+    //CREATE & UPDATE ACHIEVMENT
+    {
+        route: '/api/v1/achievement',
+        method: 'post',
+        controller: AchievementController,
+        action: 'updateAchievement'
+    },
+    
+  //GET USER ACHIEVMENTS
+    {
+        route: '/api/v1/achievement/:userid',
+        method: 'get',
+        controller: AchievementController,
+        action: 'getAllAchievementsForUser'
+    },
+    
+  //GET ALL ACHIEVMENTS
+    {
+        route: '/api/v1/achievements',
+        method: 'get',
+        controller: AchievementController,
+        action: 'getAllAchievements'
+    },
+    
+    //DELETE ALL ACHIEVEMENTS
+    {
+        route: '/api/v1/achievements',
+        method: 'delete',
+        controller: AchievementController,
+        action: 'deleteAllAchievements'
+    },
+    
+    
     
     // ------------------------------------
     // --------------- GIFTS ---------------

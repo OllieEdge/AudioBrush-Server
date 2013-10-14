@@ -32,6 +32,13 @@ User = mongoose.Schema({
         type: Date,
         "default": Date.now
     },
+    last_login: {
+        type: Date,
+        "default":Date.now
+    },
+    last_bonus: {
+        type: Date
+    },
     airship_token: {
         type: String,
         "default": ""

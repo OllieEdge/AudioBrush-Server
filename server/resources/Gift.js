@@ -5,7 +5,10 @@ var Schema = mongoose.Schema;
 var Gift = mongoose.Schema({
     to			: { type: Schema.Types.ObjectId, ref: 'User' },
     from	: { type: Schema.Types.ObjectId, ref: 'User' },
-        
+    admin:{
+    	type:String,
+    	"default": ""
+    },
     sent: {
         type: Date,
         "default": Date.now()
