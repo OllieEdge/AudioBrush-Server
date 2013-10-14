@@ -23,4 +23,4 @@ mongoose.connection.on('connected', function (data) {
 //	console.log(data)
 });
 
-mongoose.connect('localhost', 'audiobrush');
+mongoose.connect('mongodb://api:ps1ps2xbox@lafleur.mongohq.com:10091/audiobrush');
