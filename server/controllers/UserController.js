@@ -51,13 +51,32 @@ module.exports = {
             var facebookID = sanitise.username(req.params.username);//sanitise the input
 
             User
-                .find({ role: 'player', fb_id: facebookID })
+                .findOne({ fb_id: facebookID })
                 .exec(function (err, user) {
                     if (err) {
                         error(err);
                     }
                     else {
-                        res.send(200, user);
+                    	if(req.body.isLogin && user){
+                    		user.last_login = new Date();
+                    		user.save(function (err, user) {
+                                if (err) {
+                                    error(err, res);
+                                }
+                                else {
+                                    res.send(200, user);
+                                }
+                            });
+                    	}
+                    	else{
+                    		if(user){
+                    			res.send(200, user);
+                    		}
+                    		else{
+                    			res.send(200, {});
+                    		}
+                        
+                    	}
                     }
                 });
         }
@@ -137,6 +156,67 @@ module.exports = {
         }
 
     },
+    
+    //  GET BONUS STATUS
+    //  ------------------------
+    getBonusStatus: function (req, res) {
+
+        var facebookID = req.params.facebookid ? sanitise.facebookID(req.params.facebookid) : null;//sanitise the input
+
+        if (facebookID) {
+            User
+                .findOne({ fb_id: facebookID })
+                .select('last_bonus')
+                .exec(function (err, user) {
+                    if (err) {
+                        error(err, res);
+                    }
+                    else if (user) {
+                        res.send(200, user);
+                    }
+                });
+        }
+        else {
+            error(new Error('No FacebookID Provided'), res);
+        }
+
+    },
+    
+    //  COLLECT BONUS
+    //  ------------------------
+    collectBonus: function (req, res) {
+
+        var facebookID = req.params.facebookid ? sanitise.facebookID(req.params.facebookid) : null;//sanitise the input
+
+        if (facebookID) {
+            User
+                .findOne({ fb_id: facebookID })
+                .select('last_bonus credits')
+                .exec(function (err, user) {
+                    if (err) {
+                        error(err, res);
+                    }
+                    else if (user) {
+                    	//Should probably check if the bonus time is correct. 
+                    	//TODO Check if bonus is within 10 minutes of collection before submitting a save
+                        user.last_bonus = new Date();
+                        user.credits = user.credits+3;
+                        user.save(function (err, user) {
+                            if (err) {
+                                error(err, res);
+                            }
+                            else {
+                                res.send(200, user);
+                            }
+                        });
+                    }
+                });
+        }
+        else {
+            error(new Error('No FacebookID Provided'), res);
+        }
+
+    },
 
     //  DELETE USER
     //  ------------------------
@@ -158,5 +238,24 @@ module.exports = {
                 
             });
         }
-    }
+    },
+    
+    //  DELETE ALL USERS
+    //  ------------------------
+    deleteAllUsers : function (req, res){
+		User.find()
+		.exec(function (err, users) {
+			if (err) {
+				error(err, res);
+			}
+			else if (users) {
+				var i = users.length;
+				while (i--) {
+					users[i].remove();
+				}
+				res.send(200, {});
+			}
+		});
+	},
+    
 };

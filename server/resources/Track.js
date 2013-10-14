@@ -19,6 +19,9 @@ var Track = mongoose.Schema({
     last_update: {
         type   : Date,
         "default": Date.now
+    },
+    difficulty:{
+    	type:Number
     }
 });
 

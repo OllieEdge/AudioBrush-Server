@@ -23,6 +23,12 @@ var Score = Schema({
 	},
 	rank: {
 		type   : Number
+	},
+	xpRewarded: {
+		type : Number
+	},
+	starrating: {
+		type : Number
 	}
 });
 

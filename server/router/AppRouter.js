@@ -8,6 +8,7 @@ var TournamentController = require('../controllers/TournamentController');
 var TournamentDataController = require('../controllers/TournamentDataController');
 var ProductController = require('../controllers/ProductController');
 var GiftController = require('../controllers/GiftController');
+var AchievementController = require('../controllers/AchievementController');
 
 var routes = {
     // --- USERS ---
@@ -50,7 +51,7 @@ var applicationRoutes = [
 
     //UPDATE USER
     {
-        route: '/api/v1/user/:username',
+        route: '/api/v1/user/update/:username',
         method: 'post',
         controller: UserController,
         action: 'updateUser'
@@ -59,7 +60,7 @@ var applicationRoutes = [
     //GET USER
     {
         route: '/api/v1/user/:username',
-        method: 'get',
+        method: 'post',
         controller: UserController,
         action: 'readUser'
     },
@@ -73,12 +74,76 @@ var applicationRoutes = [
     },
 
     //DELETE USER
+//    {
+//        route: '/api/v1/user/:username',
+//        method: 'delete',
+//        controller: UserController,
+//        action: 'deleteUser'
+//    },
+    
+  //DELETE USER
+//    {
+//        route: '/api/v1/users',
+//        method: 'delete',
+//        controller: UserController,
+//        action: 'deleteAllUsers'
+//    },
+   
+    // ------------------------------------
+    // --------------- BONUS --------------
+    // ------------------------------------
+    //GET BONUS STATUS
     {
-        route: '/api/v1/user/:username',
-        method: 'delete',
+        route: '/api/v1/user/bonus/:facebookid',
+        method: 'get',
         controller: UserController,
-        action: 'deleteUser'
+        action: 'getBonusStatus'
     },
+    
+    //COLLECT BONUS 
+    {
+        route: '/api/v1/user/bonus/:facebookid',
+        method: 'post',
+        controller: UserController,
+        action: 'collectBonus'
+    },
+    
+    // ------------------------------------
+    // ----------- ACHIEVEMENTS ----------
+    // ------------------------------------
+    //CREATE & UPDATE ACHIEVMENT
+    {
+        route: '/api/v1/achievement',
+        method: 'post',
+        controller: AchievementController,
+        action: 'updateAchievement'
+    },
+    
+  //GET USER ACHIEVMENTS
+    {
+        route: '/api/v1/achievement/:userid',
+        method: 'get',
+        controller: AchievementController,
+        action: 'getAllAchievementsForUser'
+    },
+    
+  //GET ALL ACHIEVMENTS
+    {
+        route: '/api/v1/achievements',
+        method: 'get',
+        controller: AchievementController,
+        action: 'getAllAchievements'
+    },
+    
+//    //DELETE ALL ACHIEVEMENTS
+//    {
+//        route: '/api/v1/achievements',
+//        method: 'delete',
+//        controller: AchievementController,
+//        action: 'deleteAllAchievements'
+//    },
+    
+    
     
     // ------------------------------------
     // --------------- GIFTS ---------------
@@ -112,13 +177,13 @@ var applicationRoutes = [
         controller: GiftController,
         action: 'acceptAndSendGift'
     },
-    //DELETE ALL GIFTS
-    {
-        route: '/api/v1/gift',
-        method: 'delete',
-        controller: GiftController,
-        action: 'deleteAllGifts'
-    },
+//    //DELETE ALL GIFTS
+//    {
+//        route: '/api/v1/gift',
+//        method: 'delete',
+//        controller: GiftController,
+//        action: 'deleteAllGifts'
+//    },
 
     
     // ------------------------------------
@@ -149,13 +214,13 @@ var applicationRoutes = [
         action: 'readProduct'
     },
 
-    //DELETE PRODUCT
-    {
-        route: '/api/v1/products/:facebookID',
-        method: 'delete',
-        controller: ProductController,
-        action: 'deleteProduct'
-    },
+//    //DELETE PRODUCT
+//    {
+//        route: '/api/v1/products/:facebookID',
+//        method: 'delete',
+//        controller: ProductController,
+//        action: 'deleteProduct'
+//    },
 
 
     // ------------------------------------
@@ -217,14 +282,14 @@ var applicationRoutes = [
         controller: TrackController,
         action: 'searchTracks'
     },
-    
-  //DELETE ALL TRACKS
-    {
-        route: '/api/v1/tracks/clear',
-        method: 'delete',
-        controller: TrackController,
-        action: 'deleteAllTracks'
-    },
+//    
+//  //DELETE ALL TRACKS
+//    {
+//        route: '/api/v1/tracks/clear',
+//        method: 'delete',
+//        controller: TrackController,
+//        action: 'deleteAllTracks'
+//    },
 
 
     // ------------------------------------
@@ -263,13 +328,13 @@ var applicationRoutes = [
         action: 'getScoresForTrackWithUserIDs'
     },
     
-    //REMOVE ALL SCORES FROM DATABASE
-    {
-        route: '/api/v1/scores/clear',
-        method: 'delete',
-        controller: ScoreController,
-        action: 'deleteAllScores'
-    },
+//    //REMOVE ALL SCORES FROM DATABASE
+//    {
+//        route: '/api/v1/scores/clear',
+//        method: 'delete',
+//        controller: ScoreController,
+//        action: 'deleteAllScores'
+//    },
     
     // ------------------------------------
     // ----------- TOURNAMENTS -----------
@@ -307,13 +372,13 @@ var applicationRoutes = [
         controller: TournamentDataController,
         action: 'getActiveTournaments'
     },
-    //DELETE TOURNAMENT DATA
-    {
-        route: '/api/v1/tournament/admin/:tournamentid',
-        method: 'delete',
-        controller: TournamentDataController,
-        action: 'deleteTournament'
-    }
+//    //DELETE TOURNAMENT DATA
+//    {
+//        route: '/api/v1/tournament/admin/:tournamentid',
+//        method: 'delete',
+//        controller: TournamentDataController,
+//        action: 'deleteTournament'
+//    }
 ];
 
 

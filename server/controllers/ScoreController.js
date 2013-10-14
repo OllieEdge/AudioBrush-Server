@@ -9,6 +9,7 @@ var Score = mongoose.model('Score');
 //utils
 var error = require('../utils/Error');
 var sanitise = require('../utils/Sanitise');
+var xpCalculator = require('../utils/XPCalculator');
 
 //api
 module.exports = {
@@ -54,7 +55,7 @@ module.exports = {
 			.populate('userId')
 			.sort(sort)
 			.limit(limit)
-			.select('userId trackId score')
+			.select('userId trackId score starrating')
 			.exec(function (err, scores) {
 				if (err) {
 					error(err, res);
@@ -80,7 +81,7 @@ module.exports = {
 			})
 			.populate('userId')
 			.limit(limit)
-			.select('userId trackId score')
+			.select('userId trackId score starrating')
 			.sort('-score')
 			.exec(function (err, scores) {
 				if (err) {
@@ -107,7 +108,7 @@ module.exports = {
 			.lean()
 			.populate('trackId')
 			.populate('userId')
-			.select('userId trackId score')
+			.select('userId trackId score starrating')
 			.sort('-score')
 			.exec(function (err, scores) {
 				if (err) {
@@ -165,7 +166,10 @@ function _updatePreviousScore(req, next){
 	var trackkey = req.body.trackkey;
 	var facebookID  = req.body.fb_id;
 	var score     = req.body.score;
+	var starrating = req.body.starrating;
+	var precisestarrating = req.body.precisestarrating;
 	var userId = "";
+	var xpRewarded = xpCalculator(req.body.difficulty, precisestarrating);
 	
 	 if (!score || !trackkey || !facebookID) {
 		 console.log("Missing update score parameters, params required: trackkey, fb_id, score");
@@ -174,7 +178,7 @@ function _updatePreviousScore(req, next){
 	}
 	 
 	 User.findOne({fb_id:facebookID})
-	 .select('_id')
+	 .select('_id xp')
 	 .exec(function (err, user) {
          if (err) {
         	 next('error');
@@ -207,9 +211,15 @@ function _updatePreviousScore(req, next){
         				next('error');
         			}
         			else if(previousScore && scoresGreaterOrEqualToThisScore){
+        				previousScore.xpRewarded = xpRewarded;
+        				//Save the rewarded XP to the user.
+        				user.xp = user.xp + xpRewarded;
+        	        	user.save();
+        	        	 
         				//Only update the score is the new one is greater than the old one. The client won't send a request unless it knows the score is greater but this is a precaution.
         				if(score > previousScore.score){
         					previousScore.score = score;
+        					previousScore.starrating = starrating;
         					console.log("Saving new score.");
         					previousScore.save();
         					console.log("Saved new score.");
@@ -288,6 +298,8 @@ function _setupNewScore(req, next) {
 	var score     = req.body.score;
 	var trackname = req.body.trackname;
 	var artist = req.body.artist;
+	var difficulty = req.body.difficulty;
+	
 
 	//Make sure the compulsory parameters are set
     if (!score || !trackkey || !facebookID) {
@@ -307,14 +319,14 @@ function _setupNewScore(req, next) {
     	}
     	else {
     		//Make sure that the track parameters are set.
-    		if(!trackname || !artist){
-    			console.log("Missing parameters to save a new track. When posting a new score make sure that there are the track parameters too: trackname, artist, trackkey");
+    		if(!trackname || !artist || !difficulty){
+    			console.log("Missing parameters to save a new track. When posting a new score make sure that there are the track parameters too: trackname, artist, trackkey, difficulty");
     			next('error');
     			return;
     		}
     		console.log("Track for this score doesn't exist, creating a new track...");
     		//Create the new track document
-    		return saveNewTrack({ trackname: trackname, artist: artist , trackkey: trackkey});
+    		return saveNewTrack({ trackname: trackname, artist: artist , trackkey: trackkey, difficulty:difficulty});
     	}
     })
     .then(function (track) {//Once a new track is saved then do this...
@@ -340,6 +352,9 @@ function saveNewHighscore(req, next){
 	var trackkey = req.body.trackkey;
 	var facebookID  = req.body.fb_id;
 	var score     = req.body.score;
+	var precisestarrating = req.body.precisestarrating;
+	var xpRewarded = xpCalculator(req.body.difficulty, precisestarrating);
+	var starrating = req.body.starrating;
 	
 	
 	//We don't need to check any of the variables as we already have previously.
@@ -364,15 +379,17 @@ function saveNewHighscore(req, next){
 
 		if (track && user && scoresGreaterOrEqualToThisScore) {
 			console.log("Saving new score.");
-			var scoreObj = new Score({trackId: track._id, userId : user._id, score  : score, trackkey : track.trackkey})
+			var scoreObj = new Score({trackId: track._id, userId : user._id, score  : score, trackkey : track.trackkey, starrating: starrating})
 			.save(function (err, score) {
 				if (err) {
 					next('error');
 				}
 				else {
 					user.tracks.push(track.trackkey);
+					user.xp = user.xp + xpRewarded;
 					user.save();
 					console.log("Saved new score.");
+					score.xpRewarded = xpRewarded;
 					score.rank = scoresGreaterOrEqualToThisScore.length+1;
 					incrementTrack(track);
 					next(null, score);
@@ -433,7 +450,8 @@ function saveNewTrack(attributes, callback) {
  var track = new Track({ //else generate a new track object
      trackname: attributes.trackname,
      artist   : attributes.artist,
-     trackkey : attributes.trackkey
+     trackkey : attributes.trackkey,
+     difficulty : attributes.difficulty
  });
  track.save(function (err, track) {// and save it!
      if (err) {
