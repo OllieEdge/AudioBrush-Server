@@ -74,20 +74,20 @@ var applicationRoutes = [
     },
 
     //DELETE USER
-    {
-        route: '/api/v1/user/:username',
-        method: 'delete',
-        controller: UserController,
-        action: 'deleteUser'
-    },
+//    {
+//        route: '/api/v1/user/:username',
+//        method: 'delete',
+//        controller: UserController,
+//        action: 'deleteUser'
+//    },
     
   //DELETE USER
-    {
-        route: '/api/v1/users',
-        method: 'delete',
-        controller: UserController,
-        action: 'deleteAllUsers'
-    },
+//    {
+//        route: '/api/v1/users',
+//        method: 'delete',
+//        controller: UserController,
+//        action: 'deleteAllUsers'
+//    },
    
     // ------------------------------------
     // --------------- BONUS --------------
@@ -135,13 +135,13 @@ var applicationRoutes = [
         action: 'getAllAchievements'
     },
     
-    //DELETE ALL ACHIEVEMENTS
-    {
-        route: '/api/v1/achievements',
-        method: 'delete',
-        controller: AchievementController,
-        action: 'deleteAllAchievements'
-    },
+//    //DELETE ALL ACHIEVEMENTS
+//    {
+//        route: '/api/v1/achievements',
+//        method: 'delete',
+//        controller: AchievementController,
+//        action: 'deleteAllAchievements'
+//    },
     
     
     
@@ -177,13 +177,13 @@ var applicationRoutes = [
         controller: GiftController,
         action: 'acceptAndSendGift'
     },
-    //DELETE ALL GIFTS
-    {
-        route: '/api/v1/gift',
-        method: 'delete',
-        controller: GiftController,
-        action: 'deleteAllGifts'
-    },
+//    //DELETE ALL GIFTS
+//    {
+//        route: '/api/v1/gift',
+//        method: 'delete',
+//        controller: GiftController,
+//        action: 'deleteAllGifts'
+//    },
 
     
     // ------------------------------------
@@ -214,13 +214,13 @@ var applicationRoutes = [
         action: 'readProduct'
     },
 
-    //DELETE PRODUCT
-    {
-        route: '/api/v1/products/:facebookID',
-        method: 'delete',
-        controller: ProductController,
-        action: 'deleteProduct'
-    },
+//    //DELETE PRODUCT
+//    {
+//        route: '/api/v1/products/:facebookID',
+//        method: 'delete',
+//        controller: ProductController,
+//        action: 'deleteProduct'
+//    },
 
 
     // ------------------------------------
@@ -282,14 +282,14 @@ var applicationRoutes = [
         controller: TrackController,
         action: 'searchTracks'
     },
-    
-  //DELETE ALL TRACKS
-    {
-        route: '/api/v1/tracks/clear',
-        method: 'delete',
-        controller: TrackController,
-        action: 'deleteAllTracks'
-    },
+//    
+//  //DELETE ALL TRACKS
+//    {
+//        route: '/api/v1/tracks/clear',
+//        method: 'delete',
+//        controller: TrackController,
+//        action: 'deleteAllTracks'
+//    },
 
 
     // ------------------------------------
@@ -328,13 +328,13 @@ var applicationRoutes = [
         action: 'getScoresForTrackWithUserIDs'
     },
     
-    //REMOVE ALL SCORES FROM DATABASE
-    {
-        route: '/api/v1/scores/clear',
-        method: 'delete',
-        controller: ScoreController,
-        action: 'deleteAllScores'
-    },
+//    //REMOVE ALL SCORES FROM DATABASE
+//    {
+//        route: '/api/v1/scores/clear',
+//        method: 'delete',
+//        controller: ScoreController,
+//        action: 'deleteAllScores'
+//    },
     
     // ------------------------------------
     // ----------- TOURNAMENTS -----------
@@ -372,13 +372,13 @@ var applicationRoutes = [
         controller: TournamentDataController,
         action: 'getActiveTournaments'
     },
-    //DELETE TOURNAMENT DATA
-    {
-        route: '/api/v1/tournament/admin/:tournamentid',
-        method: 'delete',
-        controller: TournamentDataController,
-        action: 'deleteTournament'
-    }
+//    //DELETE TOURNAMENT DATA
+//    {
+//        route: '/api/v1/tournament/admin/:tournamentid',
+//        method: 'delete',
+//        controller: TournamentDataController,
+//        action: 'deleteTournament'
+//    }
 ];
 
 
