@@ -6,9 +6,9 @@ console.log('-----------------');
 console.log(UA);
 console.log('-----------------');
 
-var ua = new UA("iaRoXjpsTdWiUTGHik_Paw",
-								"oZAfBlMzSXyp6D_2umIE_g",
-								"Kh94h34eTqS4y97_EARfWQ");
+var ua = new UA("p81WhN-1S-igoV3DcgKulw",
+								"hcruaIB9RFqtR-ocNlXGtA",
+								"S833gXIaSyyI7nu2mTpzkQ");
 
 module.exports = function(config){
 
