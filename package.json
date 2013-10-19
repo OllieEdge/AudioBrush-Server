@@ -20,6 +20,7 @@
     "assert": "~0.4.9",
     "underscore": "~1.5.2",
     "q": "~0.9.7",
-    "urban-airship": "~0.2.5"
+    "urban-airship": "~0.2.5",
+    "newrelic": "~0.12.1"
   }
 }

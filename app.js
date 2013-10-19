@@ -20,7 +20,9 @@
  -------------------------------------
  */
 
-require("node-codein")
+//require("node-codein")
+require('newrelic');
+
 
 var http = require('http');
 var app = require('./server/server.js');
