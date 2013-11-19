@@ -475,5 +475,6 @@ function saveNewTrack(attributes, callback) {
 function incrementTrack(track) {
 	console.log("Incrementing track play for: " + track.trackkey);
 	track.plays = track.plays += 1;
+	track.last_update = new Date();
 	track.save();
 }

@@ -267,6 +267,14 @@ var applicationRoutes = [
         action: 'getPopularTracks'
     },
     
+  //GET TRACKS TOURNAMENT
+    {
+        route: '/api/v1/tracks/tournaments',
+        method: 'get',
+        controller: TrackController,
+        action: 'getTournamentTracks'
+    },
+    
     //GET FRIENDS TRACKS
     {
         route: '/api/v1/tracks/related',

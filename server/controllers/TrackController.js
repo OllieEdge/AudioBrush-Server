@@ -126,6 +126,27 @@ module.exports = {
 			}
 		});
     },
+    
+    getTournamentTracks : function (req, res){
+    	
+    	var re = new RegExp("tournament_", 'i');
+    	
+    	Track
+    	.find({trackkey : re } )
+		.limit(50)
+		.sort('-last_update')
+		.exec(function (err, tracks){
+			if(err){
+				error("No tracks found");
+			}
+			else if(tracks){
+				res.send(200, tracks);
+			}
+			else{
+				error("No tracks found");
+			}
+		});
+    },
 
     getTrackList: function (req, res) {
 
@@ -322,6 +343,6 @@ function saveNewTrack(attributes, callback) {
 // INCREASES A TRACKS PLAYS VALUE BY ONE
 // --------------------------------------------
 function incrementTrack(track) {
-    track.plays = track.plays += 1;
+    //track.plays = track.plays += 1;
     track.save();
 }
