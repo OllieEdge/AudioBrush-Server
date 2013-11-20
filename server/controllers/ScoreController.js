@@ -336,10 +336,6 @@ function _setupNewScore(req, next) {
     		saveNewHighscore(req, next);
     		
     	}
-    	else {
-    		console.log("There was a problem creating a new track document when posting the new score.");
-    		next('error');
-    	}
     });
 }
 
@@ -376,7 +372,11 @@ function saveNewHighscore(req, next){
 		var track = results[0];
 		var user = results[1];
 		var scoresGreaterOrEqualToThisScore = results[2];
-
+		
+		if(err){
+			console.log("There was an error whilst calling the update asyncronous method.");
+			next('error');
+		}
 		if (track && user && scoresGreaterOrEqualToThisScore) {
 			console.log("Saving new score.");
 			var scoreObj = new Score({trackId: track._id, userId : user._id, score  : score, trackkey : track.trackkey, starrating: starrating})
